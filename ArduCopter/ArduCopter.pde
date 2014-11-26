@@ -956,7 +956,7 @@ static void update_osd(void)
 	osdMax7456._roll = ahrs.roll * 57.2957795131;		//to degree *180/pi
 	//int8_t yaw = ahrs.yaw * 57.2957795131;		//to degree *180/pi
 
-	osdMax7456._WPDirection = wp_bearing;
+	osdMax7456._WPDirection = wp_bearing*0.01;
 	osdMax7456._WPDistance = wp_distance;
 	//uint8_t wayPointNum = mission.get_current_nav_index();
 	
