@@ -140,12 +140,91 @@ AP_OSD_MAX7456::AP_OSD_MAX7456()
 :_spi(NULL),
  _spi_sem(NULL),
  _osd_vars(NULL),
- _startTime(0)
+ _startTime(0),
+ _groundSpeed(0.0),
+ _throttle(0),
+ _altitude(0.0),
+ _pitch(0),
+ _roll(0),
+ _homeDirection(0),
+ _homeDistance(0),
+ _flyMode(0),
+ _startTime(0),
+ _GPSSats(0),
+ _GPSLongitude(0.0),
+ _GPSLatitude(0.0),
+ _GPSLongitudePrint(0.0),
+ _GPSLatitudePrint(0.0),
+ _BatteryVol(0.0),
+ _BatteryCurrent(0.0),
+ _BatteryPercent(0),
+ _WPDirection(0),
+ _WPDistance(0)
 {
 	AP_Param::setup_object_defaults(this, var_info);
 	
 	//default
 	_video_mode = MAX7456_MODE_MASK_PAL;
+
+	//set the position
+	_panSpeed_XY[0] = 1; 
+	_panSpeed_XY[1] = 8;
+
+	_panThrottle_XY[0] = 1;
+	_panThrottle_XY[1] = 2;
+
+	_panVehicleAlt_XY[0] = 22;
+	_panVehicleAlt_XY[1] = 8;
+
+	_panPitch_XY[0] = 8;
+	_panPitch_XY[1] = 2;
+
+	_panRoll_XY[0] = 14;
+	_panRoll_XY[1] = 2;
+
+	_panHomeDir_XY[0] = 22;
+	_panHomeDir_XY[1] = 2;
+
+	_panHomeDist_XY[0] = 22;
+	_panHomeDist_XY[1] = 3;
+
+	_panRSSI_XY[0] = 23;
+	_panRSSI_XY[1] = 4;
+
+	_panMode_XY[0] = 22;
+	_panMode_XY[1] = 5;
+
+	_panTime_XY[0] = 23;
+	_panTime_XY[1] = 6;
+
+	_panHorizon_XY[0] = 8;
+	_panHorizon_XY[1] = 6;
+
+	_panGPSSats_XY[0] = 1;
+	_panGPSSats_XY[1] = 10;
+
+	_panGPSCoord_XY[0] = 1;
+	_panGPSCoord_XY[1] = 11;
+
+	_panBatteryVol_XY[0] = 22;
+	_panBatteryVol_XY[1] = 9;
+
+	_panBatteryCurrent_XY[0] = 22;
+	_panBatteryCurrent_XY[1] = 10;
+
+	_panBatteryConsume_XY[0] = 19;
+	_panBatteryConsume_XY[1] = 11;
+
+	_panBatteryPercent_XY[0] = 22;
+	_panBatteryPercent_XY[1] = 12;
+
+	_panWPDir_XY[0] = 1;
+	_panWPDir_XY[1] = 4;
+
+	_panWPDist_XY[0] = 2;
+	_panWPDist_XY[1] = 5;
+
+	_heading = 0.0;
 }
 
 // SPI should be initialized externally
@@ -173,13 +252,13 @@ bool AP_OSD_MAX7456::init()
 	else
 	{
 		_video_mode = MAX7456_MODE_MASK_PAL;
-		_osd_vars->_panGPSSats_XY[1] = 11;
-		_osd_vars->_panGPSCoord_XY[1] = 12;
+		_panGPSSats_XY[1] = 11;
+		_panGPSCoord_XY[1] = 12;
 		
-		_osd_vars->_panBatteryVol_XY[1] = 10;
-		_osd_vars->_panBatteryCurrent_XY[1] = 11;
-		_osd_vars->_panBatteryConsume_XY[1] = 12;
-		_osd_vars->_panBatteryPercent_XY[1] = 13;
+		_panBatteryVol_XY[1] = 10;
+		_panBatteryCurrent_XY[1] = 11;
+		_panBatteryConsume_XY[1] = 12;
+		_panBatteryPercent_XY[1] = 13;
 	}
 
 	_spi->cs_assert();
@@ -223,8 +302,8 @@ bool AP_OSD_MAX7456::init()
 
 	for(_HorizonHitIndex=0;_HorizonHitIndex < 12; _HorizonHitIndex++)
 	{
-		_lastHorizonColHit[_HorizonHitIndex] = _osd_vars->_panHorizon_XY[0] + 1;
-		_lastHorizonRowHit[_HorizonHitIndex] = _osd_vars->_panHorizon_XY[1];
+		_lastHorizonColHit[_HorizonHitIndex] = _panHorizon_XY[0] + 1;
+		_lastHorizonRowHit[_HorizonHitIndex] = _panHorizon_XY[1];
 	}
 	
 	clear();
@@ -254,7 +333,7 @@ void AP_OSD_MAX7456::clear()
 
 	//hal.scheduler->delay(50);
 
-	setPanel(_osd_vars->_panHorizon_XY[0], _osd_vars->_panHorizon_XY[1]);
+	setPanel(_panHorizon_XY[0], _panHorizon_XY[1]);
 	openPanel();
 	printf_P(PSTR("\xDA\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xDB|"));
 	printf_P(PSTR("\xDA\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xDB|"));
@@ -380,7 +459,7 @@ void AP_OSD_MAX7456::showAt10HZ()
 	{
 		setPanel(12, 5);
 		openPanel();
-		printf("%4.0f%c", (double)_osd_vars->_heading, 0xb0);
+		printf("%4.0f%c", (double)_heading, 0xb0);
 		closePanel();
 	}
 
@@ -393,7 +472,7 @@ void AP_OSD_MAX7456::showAt10HZ()
 	if(_bEnableHeadRose)
 	{
 		int8_t start;
-		start = round((_osd_vars->_heading * 36)/360);
+		start = round((_heading * 36)/360);
 		start -= 5;
 		if(start < 0) start += 36;
 		for(int8_t x=0; x <= 10; x++){
@@ -411,9 +490,9 @@ void AP_OSD_MAX7456::showAt10HZ()
 	// -+ value of current Pitch from vehicle with degree symbols and pitch symbol
 	if(_bEnablePitch)
 	{
-		setPanel(_osd_vars->_panPitch_XY[0], _osd_vars->_panPitch_XY[1]);
+		setPanel(_panPitch_XY[0], _panPitch_XY[1]);
 		openPanel();
-		printf("%4i%c%c",_osd_vars->_pitch,0xb0,0xb1);
+		printf("%4i%c%c",_pitch,0xb0,0xb1);
 		closePanel();
 	}
 
@@ -421,15 +500,15 @@ void AP_OSD_MAX7456::showAt10HZ()
 	// -+ value of current Roll from vehicle with degree symbols and roll symbol
 	if(_bEnableRoll)
 	{
-		setPanel(_osd_vars->_panRoll_XY[0], _osd_vars->_panRoll_XY[1]);
+		setPanel(_panRoll_XY[0], _panRoll_XY[1]);
 		openPanel();
-		printf("%4i%c%c",_osd_vars->_roll, 0xb0, 0xb2);
+		printf("%4i%c%c",_roll, 0xb0, 0xb2);
 		closePanel();
 	}
 
 	if(_bEnableHorizon)
 	{
-		showHorizon(_osd_vars->_panHorizon_XY[0] + 1, _osd_vars->_panHorizon_XY[1]);
+		showHorizon(_panHorizon_XY[0] + 1, _panHorizon_XY[1]);
 		_spi->cs_release();
 	}
 
@@ -449,45 +528,45 @@ void AP_OSD_MAX7456::showAt3HZ()
 	// velocity, size 1 x 7
 	if(_bEnableSpeed)
 	{
-		setPanel(_osd_vars->_panSpeed_XY[0], _osd_vars->_panSpeed_XY[1]);
+		setPanel(_panSpeed_XY[0], _panSpeed_XY[1]);
 		openPanel();
-		printf("%c%c%3.0f%c%c",0xBC, 0xBD, (double)(_osd_vars->_groundSpeed * 3.6), 0xD1, 0xD2);
+		printf("%c%c%3.0f%c%c",0xBC, 0xBD, (double)(_groundSpeed * 3.6), 0xD1, 0xD2);
 		closePanel();
 	}
 
 	// throttle, size 1 x 7
 	if(_bEnableThrottle)
 	{
-		setPanel(_osd_vars->_panThrottle_XY[0], _osd_vars->_panThrottle_XY[1]);
+		setPanel(_panThrottle_XY[0], _panThrottle_XY[1]);
 		openPanel();
-		printf("%c%c%3.0i%c",0xBE, 0xBF, _osd_vars->_throttle, 0x25);
+		printf("%c%c%3.0i%c",0xBE, 0xBF, _throttle, 0x25);
 		closePanel();
 	}
 
 	// altitude, size 1 x 7
 	if(_bEnableAlt)
 	{
-		setPanel(_osd_vars->_panVehicleAlt_XY[0], _osd_vars->_panVehicleAlt_XY[1]);
+		setPanel(_panVehicleAlt_XY[0], _panVehicleAlt_XY[1]);
 		openPanel();
-		printf("%c%c%4.0f%c",0xC0, 0xBD, (double)_osd_vars->_altitude, 0x8D);
+		printf("%c%c%4.0f%c",0xC0, 0xBD, (double)_altitude, 0x8D);
 		closePanel();
 	}
 
 	// number of locked satellites, size 1 x 5
 	if(_bEnableGPSSats)
 	{
-		setPanel(_osd_vars->_panGPSSats_XY[0], _osd_vars->_panGPSSats_XY[1]);
+		setPanel(_panGPSSats_XY[0], _panGPSSats_XY[1]);
 		openPanel();
-		printf("%c%2i", 0x0f, _osd_vars->_GPSSats);
+		printf("%c%2i", 0x0f, _GPSSats);
 		closePanel();
 	}
 	
 	// GPS Longitude and Latitude, size 2 x 12
 	if(_bEnableGPSCoord)
 	{
-		setPanel(_osd_vars->_panGPSCoord_XY[0], _osd_vars->_panGPSCoord_XY[1]);
+		setPanel(_panGPSCoord_XY[0], _panGPSCoord_XY[1]);
 		openPanel();
-		printf("%c%c%11.6f|%c%c%11.6f", 0xC1, 0xBD, (double)_osd_vars->_GPSLongitudePrint*1000, 0xC2, 0xBD, (double)_osd_vars->_GPSLatitudePrint*1000);
+		printf("%c%c%11.6f|%c%c%11.6f", 0xC1, 0xBD, (double)_GPSLongitudePrint*1000, 0xC2, 0xBD, (double)_GPSLatitudePrint*1000);
 		closePanel();
 	}
 
@@ -507,104 +586,104 @@ void AP_OSD_MAX7456::showAt1HZ()
 	if(_bEnableHome)
 	{
 		// home direction, size 1 x 5
-		setPanel(_osd_vars->_panHomeDir_XY[0], _osd_vars->_panHomeDir_XY[1]);
+		setPanel(_panHomeDir_XY[0], _panHomeDir_XY[1]);
 		openPanel();
-		uint8_t home_bearing = round(((float)_osd_vars->_homeDirection - _osd_vars->_heading)/360.0 * 16.0) + 1; //Convert to int 0-16 
+		uint8_t home_bearing = round(((float)_homeDirection - _heading)/360.0 * 16.0) + 1; //Convert to int 0-16 
 		if(home_bearing < 0 ) home_bearing += 16; //normalize
 		showArrow((uint8_t)home_bearing,0);
 		closePanel();
 
 		// home distance, size 1 x 5
-		setPanel(_osd_vars->_panHomeDist_XY[0], _osd_vars->_panHomeDist_XY[1]);
+		setPanel(_panHomeDist_XY[0], _panHomeDist_XY[1]);
 		openPanel();
-		printf("%5.0f%c",(double)(_osd_vars->_homeDistance*0.01f), 0x8D);
+		printf("%5.0f%c",(double)(_homeDistance*0.01f), 0x8D);
 		closePanel();
 	}
 
 	// flight mode 
 	// TODO - ugly? fixme!
-	setPanel(_osd_vars->_panMode_XY[0], _osd_vars->_panMode_XY[1]);
+	setPanel(_panMode_XY[0], _panMode_XY[1]);
 	openPanel();
 	char* mode_str = "";
-	if (_osd_vars->_flyMode == 0)       mode_str = "stab"; //Stabilize: hold level position
-	else if (_osd_vars->_flyMode == 1)  mode_str = "acro"; //Acrobatic: rate control
-	else if (_osd_vars->_flyMode == 2)  mode_str = "alth"; //Altitude Hold: auto control
-	else if (_osd_vars->_flyMode == 3)  mode_str = "auto"; //Auto: auto control
-	else if (_osd_vars->_flyMode == 4)  mode_str = "guid"; //Guided: auto control
-	else if (_osd_vars->_flyMode == 5)  mode_str = "loit"; //Loiter: hold a single location
-	else if (_osd_vars->_flyMode == 6)  mode_str = "retl"; //Return to Launch: auto control
-	else if (_osd_vars->_flyMode == 7)  mode_str = "circ"; //Circle: auto control
-	else if (_osd_vars->_flyMode == 8)  mode_str = "posi"; //Position: auto control
-	else if (_osd_vars->_flyMode == 9)  mode_str = "land"; //Land:: auto control
-	else if (_osd_vars->_flyMode == 10) mode_str = "oflo"; //OF_Loiter: hold a single location using optical flow sensor
-	else if (_osd_vars->_flyMode == 11) mode_str = "drif"; //Drift mode: 
-	else if (_osd_vars->_flyMode == 13) mode_str = "sprt"; //Sport: earth frame rate control
-	else if (_osd_vars->_flyMode == 14) mode_str = "flip"; //Flip: flip the vehicle on the roll axis
-	else if (_osd_vars->_flyMode == 15) mode_str = "atun"; //Auto Tune: autotune the vehicle's roll and pitch gains
-	else if (_osd_vars->_flyMode == 16) mode_str = "hybr"; //Hybrid: position hold with manual override
+	if (_flyMode == 0)       mode_str = "stab"; //Stabilize: hold level position
+	else if (_flyMode == 1)  mode_str = "acro"; //Acrobatic: rate control
+	else if (_flyMode == 2)  mode_str = "alth"; //Altitude Hold: auto control
+	else if (_flyMode == 3)  mode_str = "auto"; //Auto: auto control
+	else if (_flyMode == 4)  mode_str = "guid"; //Guided: auto control
+	else if (_flyMode == 5)  mode_str = "loit"; //Loiter: hold a single location
+	else if (_flyMode == 6)  mode_str = "retl"; //Return to Launch: auto control
+	else if (_flyMode == 7)  mode_str = "circ"; //Circle: auto control
+	else if (_flyMode == 8)  mode_str = "posi"; //Position: auto control
+	else if (_flyMode == 9)  mode_str = "land"; //Land:: auto control
+	else if (_flyMode == 10) mode_str = "oflo"; //OF_Loiter: hold a single location using optical flow sensor
+	else if (_flyMode == 11) mode_str = "drif"; //Drift mode: 
+	else if (_flyMode == 13) mode_str = "sprt"; //Sport: earth frame rate control
+	else if (_flyMode == 14) mode_str = "flip"; //Flip: flip the vehicle on the roll axis
+	else if (_flyMode == 15) mode_str = "atun"; //Auto Tune: autotune the vehicle's roll and pitch gains
+	else if (_flyMode == 16) mode_str = "hybr"; //Hybrid: position hold with manual override
 	printf("%c%c%c%s", 0xC7, 0xC8, 0x20, mode_str);
 	closePanel();
 
 	//  flight time from start
 	if(_bEnableTime)
 	{
-		setPanel(_osd_vars->_panTime_XY[0], _osd_vars->_panTime_XY[1]);
+		setPanel(_panTime_XY[0], _panTime_XY[1]);
 		openPanel();
-		_osd_vars->_startTime = hal.scheduler->millis()*0.001f;
-		printf("%c%2i%c%02i", 0xB3, ((int)_osd_vars->_startTime/60)%60,0x3A,(int)_osd_vars->_startTime%60);
+		_startTime = hal.scheduler->millis()*0.001f;
+		printf("%c%2i%c%02i", 0xB3, ((int)_startTime/60)%60,0x3A,(int)_startTime%60);
 		closePanel();
 	}
 
 	// Total battery current consume since start up in amp/h
 	if(_iEnableCurConsume)
 	{
-		setPanel(_osd_vars->_panBatteryConsume_XY[0], _osd_vars->_panBatteryConsume_XY[1]);
+		setPanel(_panBatteryConsume_XY[0], _panBatteryConsume_XY[1]);
 		openPanel();
-		printf("%c%c%5i%c%c%c", 0xeb, 0xcb, (int)_osd_vars->_BatteryConsum, 0xb6, 0xb7, 0xc9);
+		printf("%c%c%5i%c%c%c", 0xeb, 0xcb, (int)_BatteryConsum, 0xb6, 0xb7, 0xc9);
 		closePanel();
 	}
 
 	// battery voltage, size 1 x 8
 	if(_bEnableBattVol)
 	{
-		setPanel(_osd_vars->_panBatteryVol_XY[0], _osd_vars->_panBatteryVol_XY[1]);
+		setPanel(_panBatteryVol_XY[0], _panBatteryVol_XY[1]);
 		openPanel();
-		printf("%c%c%5.2f%c", 0xCB, 0xCC, (double)_osd_vars->_BatteryVol, 0x8e);
+		printf("%c%c%5.2f%c", 0xCB, 0xCC, (double)_BatteryVol, 0x8e);
 		closePanel();
 	}
 
 	// battery current, size 1 x 8
 	if(_bEnableBattCur)
 	{
-		setPanel(_osd_vars->_panBatteryCurrent_XY[0], _osd_vars->_panBatteryCurrent_XY[1]);
+		setPanel(_panBatteryCurrent_XY[0], _panBatteryCurrent_XY[1]);
 		openPanel();
-		printf("%c%c%5.2f%c", 0xCB, 0xCD, (float(_osd_vars->_BatteryCurrent) * .01), 0x8F);
+		printf("%c%c%5.2f%c", 0xCB, 0xCD, (float(_BatteryCurrent) * .01), 0x8F);
 		closePanel();
 	}
 
 	// battery percent, size 1 x 8
 	if(_bEnableBattPercent)
 	{
-		setPanel(_osd_vars->_panBatteryPercent_XY[0], _osd_vars->_panBatteryPercent_XY[1]);
+		setPanel(_panBatteryPercent_XY[0], _panBatteryPercent_XY[1]);
 		openPanel();
-		printf("%c%c%3.0i%c", 0xCB, 0xCE, _osd_vars->_BatteryPercent, 0x25);
+		printf("%c%c%3.0i%c", 0xCB, 0xCE, _BatteryPercent, 0x25);
 		closePanel();
 	}
 
 	if(_bEnableWP)
 	{
 		// waypoint direction, size 1 x 5
-		setPanel(_osd_vars->_panWPDir_XY[0], _osd_vars->_panWPDir_XY[1]);
+		setPanel(_panWPDir_XY[0], _panWPDir_XY[1]);
 		openPanel();
-		uint8_t wp_target_bearing = round(((float)_osd_vars->_WPDirection - _osd_vars->_heading)/360.0 * 16.0) + 1; //Convert to int 0-16 
+		uint8_t wp_target_bearing = round(((float)_WPDirection - _heading)/360.0 * 16.0) + 1; //Convert to int 0-16 
 		if(wp_target_bearing < 0 ) wp_target_bearing += 16; //normalize
 		showArrow((uint8_t)wp_target_bearing,1);
 		closePanel();
 
 		// waypoint distance, size 1 x 5
-		setPanel(_osd_vars->_panWPDist_XY[0], _osd_vars->_panWPDist_XY[1]);
+		setPanel(_panWPDist_XY[0], _panWPDist_XY[1]);
 		openPanel();
-		printf("%5.0f%c",(double)(_osd_vars->_WPDistance*0.01f), 0x8D);
+		printf("%5.0f%c",(double)(_WPDistance*0.01f), 0x8D);
 		closePanel();
 	}
 
@@ -622,80 +701,6 @@ void AP_OSD_MAX7456::showArrow(uint8_t rotate_arrow, uint8_t mode)
 		arrow_set2 = arrow_set1+0x1;
 	}
 
-	//char arrow_set1 = 0x0;
-	//char arrow_set2 = 0x0;
-
-	//switch(rotate_arrow) {
-	//case 0: 
-	//	arrow_set1 = 0x90;
-	//	arrow_set2 = 0x91;
-	//	break;
-	//case 1: 
-	//	arrow_set1 = 0x90;
-	//	arrow_set2 = 0x91;
-	//	break;
-	//case 2: 
-	//	arrow_set1 = 0x92;
-	//	arrow_set2 = 0x93;
-	//	break;
-	//case 3: 
-	//	arrow_set1 = 0x94;
-	//	arrow_set2 = 0x95;
-	//	break;
-	//case 4: 
-	//	arrow_set1 = 0x96;
-	//	arrow_set2 = 0x97;
-	//	break;
-	//case 5: 
-	//	arrow_set1 = 0x98;
-	//	arrow_set2 = 0x99;
-	//	break;
-	//case 6: 
-	//	arrow_set1 = 0x9A;
-	//	arrow_set2 = 0x9B;
-	//	break;
-	//case 7: 
-	//	arrow_set1 = 0x9C;
-	//	arrow_set2 = 0x9D;
-	//	break;
-	//case 8: 
-	//	arrow_set1 = 0x9E;
-	//	arrow_set2 = 0x9F;
-	//	break;
-	//case 9: 
-	//	arrow_set1 = 0xA0;
-	//	arrow_set2 = 0xA1;
-	//	break;
-	//case 10: 
-	//	arrow_set1 = 0xA2;
-	//	arrow_set2 = 0xA3;
-	//	break;
-	//case 11: 
-	//	arrow_set1 = 0xA4;
-	//	arrow_set2 = 0xA5;
-	//	break;
-	//case 12: 
-	//	arrow_set1 = 0xA6;
-	//	arrow_set2 = 0xA7;
-	//	break;
-	//case 13: 
-	//	arrow_set1 = 0xA8;
-	//	arrow_set2 = 0xA9;
-	//	break;
-	//case 14: 
-	//	arrow_set1 = 0xAA;
-	//	arrow_set2 = 0xAB;
-	//	break;
-	//case 15: 
-	//	arrow_set1 = 0xAC;
-	//	arrow_set2 = 0xAd;
-	//	break;
-	//case 16: 
-	//	arrow_set1 = 0xAE;
-	//	arrow_set2 = 0xAF;
-	//	break;
-	//} 
-
 	if(mode == 0)		printf("%c%c%c", 0x1F, arrow_set1, arrow_set2);			//home icon
 	else if(mode == 1)	printf("%c%c%c%c", 0xCF, 0xD0, arrow_set1, arrow_set2);	//waypoint
 	else if(mode == 2)	printf("%c%c", arrow_set1, arrow_set2);	//heading
@@ -710,8 +715,8 @@ void AP_OSD_MAX7456::showHorizon(uint8_t start_col, uint8_t start_row)
 	int col_hit[cols];
 	float  pitch, roll;
 
-	(abs(_osd_vars->_pitch) == 90)?pitch = 89.99 * (90/_osd_vars->_pitch) * -0.017453293:pitch = _osd_vars->_pitch * -0.017453293;
-	(abs(_osd_vars->_roll) == 90)?roll = 89.99 * (90/_osd_vars->_roll) * 0.017453293:roll = _osd_vars->_roll * 0.017453293;
+	(abs(_pitch) == 90)?pitch = 89.99 * (90/_pitch) * -0.017453293:pitch = _pitch * -0.017453293;
+	(abs(_roll) == 90)?roll = 89.99 * (90/_roll) * 0.017453293:roll = _roll * 0.017453293;
 
 	nose = round(tan(pitch) * (rows*9));
 	for(int col=1;col <= cols;col++){
