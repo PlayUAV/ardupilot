@@ -156,7 +156,7 @@
 #include <AP_Parachute.h>		// Parachute release library
 #endif
 #include <AP_Terrain.h>
-
+#include <AP_OSD_MAX7456.h>
 // AP_HAL to Arduino compatibility layer
 #include "compat.h"
 // Configuration
@@ -274,7 +274,7 @@ static AP_Baro_MS5611 barometer(&AP_Baro_MS5611::spi);
  #error Unrecognized CONFIG_BARO setting
 #endif
 static Baro_Glitch baro_glitch(barometer);
-
+static AP_OSD_MAX7456 osdMax7456;
 #if CONFIG_COMPASS == HAL_COMPASS_PX4
 static AP_Compass_PX4 compass;
 #elif CONFIG_COMPASS == HAL_COMPASS_VRBRAIN
@@ -842,6 +842,7 @@ static const AP_Scheduler::Task scheduler_tasks[] PROGMEM = {
 #ifdef USERHOOK_SUPERSLOWLOOP
     { userhook_SuperSlowLoop,400,   10 },
 #endif
+	{ update_osd,		    40,     10 },
 };
 #else
 /*
@@ -907,6 +908,7 @@ static const AP_Scheduler::Task scheduler_tasks[] PROGMEM = {
 #ifdef USERHOOK_SUPERSLOWLOOP
     { userhook_SuperSlowLoop,100,   100 },
 #endif
+	{ update_osd,		     10,     50 },
 };
 #endif
 
@@ -925,6 +927,15 @@ void setup()
 
     // initialise the main loop scheduler
     scheduler.init(&scheduler_tasks[0], sizeof(scheduler_tasks)/sizeof(scheduler_tasks[0]));
+}
+
+static void update_osd(void)
+{
+
+	if(osd_should_run <0)
+		return;
+
+	osdMax7456.updateScreen();
 }
 
 /*

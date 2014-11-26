@@ -294,6 +294,9 @@ static void init_ardupilot()
         hal.uartD->set_blocking_writes(false);
     }
 
+	osdMax7456.init();
+	osd_should_run = 1;
+	
     cliSerial->print_P(PSTR("\nReady to FLY "));
 
     // flag that initialisation has completed
