@@ -29,6 +29,7 @@ private:
     AVRSPI0DeviceDriver* _mpu6k;
     AVRSPI0DeviceDriver* _ms5611;
     AVRSPI0DeviceDriver* _optflow_spi0;
+	AVRSPI0DeviceDriver* _max7456;
 
     AVRSPI3DeviceDriver* _dataflash;
     AVRSPI3DeviceDriver* _optflow_spi3;

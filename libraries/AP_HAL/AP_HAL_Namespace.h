@@ -55,7 +55,8 @@ namespace AP_HAL {
         SPIDevice_ADNS3080_SPI3,
         SPIDevice_MPU9250,
         SPIDevice_LSM9DS0_AM,
-        SPIDevice_LSM9DS0_G
+        SPIDevice_LSM9DS0_G,
+		SPIDevice_MAX7456,
     };
 
 }
