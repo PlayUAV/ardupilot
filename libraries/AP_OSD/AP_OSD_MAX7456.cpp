@@ -139,8 +139,6 @@ const AP_Param::GroupInfo AP_OSD_MAX7456::var_info[] PROGMEM = {
 AP_OSD_MAX7456::AP_OSD_MAX7456()
 :_spi(NULL),
  _spi_sem(NULL),
- _osd_vars(NULL),
- _startTime(0),
  _groundSpeed(0.0),
  _throttle(0),
  _altitude(0.0),
@@ -232,7 +230,6 @@ bool AP_OSD_MAX7456::init()
 {
 	_spi = hal.spi->device(AP_HAL::SPIDevice_MAX7456);
 	_spi_sem = _spi->get_semaphore();
-	_osd_vars = new AP_OSD_Vars();
 
 	//TTTest
 	//read_one_char_from_NVM(1);
@@ -308,10 +305,10 @@ bool AP_OSD_MAX7456::init()
 	
 	clear();
 
-	_startTime = hal.scheduler->millis();
-	_lastUpdate10HZ = _startTime;
-	_lastUpdate3HZ = _startTime;
-	_lastUpdate1HZ = _startTime;
+	uint32_t nowtime = hal.scheduler->millis();
+	_lastUpdate10HZ = nowtime;
+	_lastUpdate3HZ = nowtime;
+	_lastUpdate1HZ = nowtime;
 
 	return true;
 }
@@ -753,35 +750,6 @@ void AP_OSD_MAX7456::printHit(uint8_t col, uint8_t row, uint8_t subval)
 
 	openSingle(col, row);
 	char subval_char = 0x05 + subval;
-	//switch (subval){
-	//	case 1:
-	//		subval_char = 0x06;
-	//		break;
-	//	case 2:
-	//		subval_char = 0x07; 
-	//		break;
-	//	case 3:
-	//		subval_char = 0x08;
-	//		break;
-	//	case 4:
-	//		subval_char = 0x09;
-	//		break;
-	//	case 5:
-	//		subval_char = 0x0a; 
-	//		break;
-	//	case 6:
-	//		subval_char = 0x0b;
-	//		break;
-	//	case 7:
-	//		subval_char = 0x0c;
-	//		break;
-	//	case 8:
-	//		subval_char = 0x0d;
-	//		break;
-	//	case 9:
-	//		subval_char = 0x0e;
-	//		break;
-	//}
 	printf("%c", subval_char);
 
 }

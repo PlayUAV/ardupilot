@@ -35,9 +35,30 @@ public:
 	//the implementations of AP_OSD_STREAM::write
 	virtual size_t write(uint8_t c);
 
-	AP_OSD_Vars *_osd_vars;
-
 	static const struct AP_Param::GroupInfo var_info[];
+public:
+	// screen display variable
+	float		_groundSpeed;
+	uint16_t	_throttle;
+	float		_altitude;
+	int8_t		_pitch;
+	int8_t		_roll;
+	int32_t		_homeDirection;	// Arrow direction pointing to home (1-16 to CW loop)
+	int32_t		_homeDistance;
+	uint8_t		_flyMode;
+	float		_startTime;
+	uint8_t		_GPSSats;
+	float		_GPSLongitude;
+	float		_GPSLatitude;
+	float		_GPSLongitudePrint;
+	float		_GPSLatitudePrint;
+	float		_BatteryVol;
+	float		_BatteryCurrent;
+	uint8_t		_BatteryPercent;
+	float		_BatteryConsum;
+	int32_t		_WPDirection;
+	int32_t		_WPDistance;
+	float		_heading;
 protected:
 	//parameters which can be set from the ground station
 	AP_Int8		_bEnableSpeed;				//if show the speed
@@ -93,7 +114,6 @@ private:
 	AP_HAL::Semaphore *_spi_sem;
 	
 	uint8_t start_col, start_row, col, row, _video_mode;
-	uint32_t		_startTime;
 	uint32_t		_lastUpdate10HZ;
 	uint32_t		_lastUpdate3HZ;
 	uint32_t		_lastUpdate1HZ;
@@ -101,28 +121,7 @@ private:
 	uint8_t			_lastHorizonRowHit[12];
 	uint8_t			_HorizonHitIndex;
 
-	// screen display variable
-	float		_groundSpeed;
-	uint16_t	_throttle;
-	float		_altitude;
-	int8_t		_pitch;
-	int8_t		_roll;
-	int32_t		_homeDirection;	// Arrow direction pointing to home (1-16 to CW loop)
-	int32_t		_homeDistance;
-	uint8_t		_flyMode;
-	float		_startTime;
-	uint8_t		_GPSSats;
-	float		_GPSLongitude;
-	float		_GPSLatitude;
-	float		_GPSLongitudePrint;
-	float		_GPSLatitudePrint;
-	float		_BatteryVol;
-	float		_BatteryCurrent;
-	uint8_t		_BatteryPercent;
-	float		_BatteryConsum;
-	int32_t		_WPDirection;
-	int32_t		_WPDistance;
-	float		_heading;
+	
 };
 
 #endif //  __AP_OSD_MAX7456_H__

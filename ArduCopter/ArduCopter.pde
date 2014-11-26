@@ -275,6 +275,8 @@ static AP_Baro_MS5611 barometer(&AP_Baro_MS5611::spi);
 #endif
 static Baro_Glitch baro_glitch(barometer);
 static AP_OSD_MAX7456 osdMax7456;
+static int8_t osd_should_run = -1;
+
 #if CONFIG_COMPASS == HAL_COMPASS_PX4
 static AP_Compass_PX4 compass;
 #elif CONFIG_COMPASS == HAL_COMPASS_VRBRAIN
@@ -934,6 +936,35 @@ static void update_osd(void)
 
 	if(osd_should_run <0)
 		return;
+
+	osdMax7456._BatteryVol = battery.voltage();
+	osdMax7456._BatteryCurrent = battery.current_amps() * 100;
+	osdMax7456._BatteryPercent = battery.capacity_remaining_pct();
+	osdMax7456._BatteryConsum =  battery.current_total_mah();	//Total current consume since start up in amp/h
+
+	osdMax7456._GPSSats = gps.status(0);
+	osdMax7456._GPSLongitudePrint = current_loc.lng * 0.0000000001;
+	osdMax7456._GPSLatitudePrint = current_loc.lat * 0.0000000001;
+
+	osdMax7456._groundSpeed = ahrs.groundspeed();
+	osdMax7456._heading = (ahrs.yaw_sensor / 100) % 360;
+	osdMax7456._throttle = g.rc_3.servo_out * 0.1;
+	osdMax7456._altitude = current_loc.alt * 0.01;
+	//float climbRate = climb_rate / 100.0f;
+
+	osdMax7456._pitch = ahrs.pitch * 57.2957795131;		//to degree *180/pi
+	osdMax7456._roll = ahrs.roll * 57.2957795131;		//to degree *180/pi
+	//int8_t yaw = ahrs.yaw * 57.2957795131;		//to degree *180/pi
+
+	osdMax7456._WPDirection = wp_bearing;
+	osdMax7456._WPDistance = wp_distance;
+	//uint8_t wayPointNum = mission.get_current_nav_index();
+	
+	osdMax7456._homeDirection = home_bearing*0.01;
+	osdMax7456._homeDistance = home_distance;
+
+	osdMax7456._flyMode = control_mode;
+	osdMax7456._startTime = hal.scheduler->millis()*0.001f;
 
 	osdMax7456.updateScreen();
 }
