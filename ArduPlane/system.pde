@@ -215,6 +215,10 @@ static void init_ardupilot()
 
     set_mode(MANUAL);
 
+	osdMax7456.init();
+	osdMax7456.osd_frame_type = 1;
+	osd_should_run = 1;
+
     // set the correct flight mode
     // ---------------------------
     reset_control_switch();

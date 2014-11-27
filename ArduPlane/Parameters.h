@@ -129,7 +129,8 @@ public:
         k_param_flap_slewrate,
         k_param_rtl_autoland,
         k_param_override_channel,
-        k_param_stall_prevention,
+        k_param_stall_prevention,		//85
+		k_param_osdMax7456,				//86
 
         // 100: Arming parameters
         k_param_arming = 100,
