@@ -36,6 +36,7 @@ public:
 	virtual size_t write(uint8_t c);
 
 	static const struct AP_Param::GroupInfo var_info[];
+	uint8_t  osd_frame_type;	//0:copter 1:plan. This value be set at sys.init()
 public:
 	// screen display variable
 	float		_groundSpeed;

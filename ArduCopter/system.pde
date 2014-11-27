@@ -295,6 +295,7 @@ static void init_ardupilot()
     }
 
 	osdMax7456.init();
+	osdMax7456.osd_frame_type = 0;
 	osd_should_run = 1;
 	
     cliSerial->print_P(PSTR("\nReady to FLY "));

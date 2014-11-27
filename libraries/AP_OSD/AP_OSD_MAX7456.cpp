@@ -19,7 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "AP_OSD_MAX7456.h"
 #include <AP_Math.h>
 
-
 extern const AP_HAL::HAL& hal;
 
 
@@ -602,22 +601,44 @@ void AP_OSD_MAX7456::showAt1HZ()
 	setPanel(_panMode_XY[0], _panMode_XY[1]);
 	openPanel();
 	char* mode_str = "";
-	if (_flyMode == 0)       mode_str = "stab"; //Stabilize: hold level position
-	else if (_flyMode == 1)  mode_str = "acro"; //Acrobatic: rate control
-	else if (_flyMode == 2)  mode_str = "alth"; //Altitude Hold: auto control
-	else if (_flyMode == 3)  mode_str = "auto"; //Auto: auto control
-	else if (_flyMode == 4)  mode_str = "guid"; //Guided: auto control
-	else if (_flyMode == 5)  mode_str = "loit"; //Loiter: hold a single location
-	else if (_flyMode == 6)  mode_str = "retl"; //Return to Launch: auto control
-	else if (_flyMode == 7)  mode_str = "circ"; //Circle: auto control
-	else if (_flyMode == 8)  mode_str = "posi"; //Position: auto control
-	else if (_flyMode == 9)  mode_str = "land"; //Land:: auto control
-	else if (_flyMode == 10) mode_str = "oflo"; //OF_Loiter: hold a single location using optical flow sensor
-	else if (_flyMode == 11) mode_str = "drif"; //Drift mode: 
-	else if (_flyMode == 13) mode_str = "sprt"; //Sport: earth frame rate control
-	else if (_flyMode == 14) mode_str = "flip"; //Flip: flip the vehicle on the roll axis
-	else if (_flyMode == 15) mode_str = "atun"; //Auto Tune: autotune the vehicle's roll and pitch gains
-	else if (_flyMode == 16) mode_str = "hybr"; //Hybrid: position hold with manual override
+	if(osd_frame_type == 1)		//is plan
+	{
+		if (_flyMode == 0)       mode_str = "manu"; //Manual
+		else if (_flyMode == 1)  mode_str = "circ"; //Circle
+		else if (_flyMode == 2)  mode_str = "stab"; //Stabilize
+		else if (_flyMode == 3)  mode_str = "trng"; //Training
+		else if (_flyMode == 4)  mode_str = "acro"; //Acro
+		else if (_flyMode == 5)  mode_str = "fbwa"; //Fly_By_Wire_A
+		else if (_flyMode == 6)  mode_str = "fbwb"; //Fly_By_Wire_B
+		else if (_flyMode == 7)  mode_str = "crui"; //Cruise
+		else if (_flyMode == 8)  mode_str = "atun"; //Auto Tune
+		else if (_flyMode == 10) mode_str = "auto"; //Auto
+		else if (_flyMode == 11) mode_str = "retl"; //Return to Launch
+		else if (_flyMode == 12) mode_str = "loit"; //Loiter
+		else if (_flyMode == 15) mode_str = "guid"; //Guided
+		else if (_flyMode == 16) mode_str = "init"; //Initializing
+	}
+	else
+	{
+		if (_flyMode == 0)       mode_str = "stab"; //Stabilize: hold level position
+		else if (_flyMode == 1)  mode_str = "acro"; //Acrobatic: rate control
+		else if (_flyMode == 2)  mode_str = "alth"; //Altitude Hold: auto control
+		else if (_flyMode == 3)  mode_str = "auto"; //Auto: auto control
+		else if (_flyMode == 4)  mode_str = "guid"; //Guided: auto control
+		else if (_flyMode == 5)  mode_str = "loit"; //Loiter: hold a single location
+		else if (_flyMode == 6)  mode_str = "retl"; //Return to Launch: auto control
+		else if (_flyMode == 7)  mode_str = "circ"; //Circle: auto control
+		else if (_flyMode == 8)  mode_str = "posi"; //Position: auto control
+		else if (_flyMode == 9)  mode_str = "land"; //Land:: auto control
+		else if (_flyMode == 10) mode_str = "oflo"; //OF_Loiter: hold a single location using optical flow sensor
+		else if (_flyMode == 11) mode_str = "drif"; //Drift mode: 
+		else if (_flyMode == 13) mode_str = "sprt"; //Sport: earth frame rate control
+		else if (_flyMode == 14) mode_str = "flip"; //Flip: flip the vehicle on the roll axis
+		else if (_flyMode == 15) mode_str = "atun"; //Auto Tune: autotune the vehicle's roll and pitch gains
+		else if (_flyMode == 16) mode_str = "hybr"; //Hybrid: position hold with manual override
+	}
+	
+
 	printf("%c%c%c%s", 0xC7, 0xC8, 0x20, mode_str);
 	closePanel();
 
