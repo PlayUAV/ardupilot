@@ -214,6 +214,10 @@ public:
 
 private:
     void        handleMessage(mavlink_message_t * msg);
+	
+	//this allow us to detect if the user wanting upload max7456 fonts
+	uint8_t			star_count;
+	void		uploadFont(mavlink_channel_t chan);
 
     /// Perform queued sending operations
     ///
