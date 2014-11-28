@@ -59,10 +59,8 @@ void APM2SPIDeviceManager::init(void* machtnichts) {
     _optflow_spi3 = new AVRSPI3DeviceDriver(optflow_cs, 3, 3);
     _optflow_spi3->init();
 
-	/* max7456 cs is on Arduino pin 53, PORTB0 */
+	/* max7456 cs is on Arduino pin 53, PORTG3 */
 	AVRDigitalSource* max7456_cs = new AVRDigitalSource(_BV(3), PG);
-	/* max7456: run clock at 8MHz in high speed mode and 512kHz for low
-	* speed */
 	_max7456 = new AVRSPI0DeviceDriver(max7456_cs, SPI0_SPCR_500kHz, SPI0_SPCR_8MHz, SPI0_SPSR_8MHz);
 	_max7456->init();
 }
