@@ -852,7 +852,7 @@ static void update_osd(void)
 	//uint8_t wayPointNum = mission.get_current_nav_index();
 
 	osdMax7456._homeDirection = get_bearing_cd(home, current_loc)*0.01f;
-	osdMax7456._homeDistance = get_distance(home, current_loc);
+	osdMax7456._homeDistance = get_distance_cm(home, current_loc);
 
 	osdMax7456._flyMode = control_mode;
 	osdMax7456._startTime = hal.scheduler->millis() * 0.001f;
