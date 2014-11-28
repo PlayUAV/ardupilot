@@ -848,7 +848,7 @@ static void update_osd(void)
 	//int8_t yaw = ahrs.yaw * 57.2957795131;		//to degree *180/pi
 
 	osdMax7456._WPDirection = nav_controller->target_bearing_cd() * 0.01f;
-	osdMax7456._WPDistance = wp_distance;
+	osdMax7456._WPDistance = wp_distance*100;
 	//uint8_t wayPointNum = mission.get_current_nav_index();
 
 	osdMax7456._homeDirection = get_bearing_cd(home, current_loc)*0.01f;
