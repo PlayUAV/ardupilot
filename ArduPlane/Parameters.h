@@ -130,7 +130,10 @@ public:
         k_param_rtl_autoland,
         k_param_override_channel,
         k_param_stall_prevention,		//85
+
+		//playuav hack begin
 		k_param_osdMax7456,				//86
+		//playuav hack end
 
         // 100: Arming parameters
         k_param_arming = 100,

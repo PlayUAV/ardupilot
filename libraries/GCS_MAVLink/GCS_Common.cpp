@@ -885,6 +885,7 @@ GCS_MAVLINK::update(void (*run_cli)(AP_HAL::UARTDriver *))
     {
         uint8_t c = comm_receive_ch(chan);
 
+		//playuav hack begin
 		if (mavlink_active == 0 && (hal.scheduler->millis() - _cli_timeout) < 20000) {
 			if (c == '*') {
 				star_count++;
@@ -898,6 +899,7 @@ GCS_MAVLINK::update(void (*run_cli)(AP_HAL::UARTDriver *))
 				star_count = 0;
 			}
 		}
+		//playuav hack end
 
         if (run_cli != NULL) {
             /* allow CLI to be started by hitting enter 3 times, if no

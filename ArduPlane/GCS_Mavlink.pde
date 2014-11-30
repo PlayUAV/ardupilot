@@ -1693,6 +1693,7 @@ static void gcs_retry_deferred(void)
     gcs_send_message(MSG_RETRY_DEFERRED);
 }
 
+//playuav hack begin
 void GCS_MAVLINK::uploadFont(mavlink_channel_t chan)
 {
 
@@ -1777,3 +1778,4 @@ void GCS_MAVLINK::uploadFont(mavlink_channel_t chan)
 
 	//  character_bitmap[]
 }
+//playuav hack end

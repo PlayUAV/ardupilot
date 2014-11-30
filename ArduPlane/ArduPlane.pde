@@ -84,7 +84,10 @@
 #include <AP_ServoRelayEvents.h>
 
 #include <AP_Rally.h>
+
+//playuav hack begin
 #include <AP_OSD_MAX7456.h>
+//playuav hack end
 
 // Pre-AP_HAL compatibility
 #include "compat.h"
@@ -189,9 +192,11 @@ static int32_t pitch_limit_min_cd;
 // GPS driver
 static AP_GPS gps;
 
+//playuav hack begin
 // OSD driver
 static AP_OSD_MAX7456 osdMax7456;
 static int8_t osd_should_run = -1;
+//playuav hack end
 
 // flight modes convenience array
 static AP_Int8          *flight_modes = &g.flight_mode1;
@@ -817,12 +822,16 @@ static const AP_Scheduler::Task scheduler_tasks[] PROGMEM = {
     { telemetry_send,        10,    100 },	
 #endif
     { terrain_update,         5,    500 },
+
+	//playuav hack begin
 	{ update_osd,		     10,    300 },
+	//playuav hack end
 };
 
 // setup the var_info table
 AP_Param param_loader(var_info);
 
+//playuav hack begin
 static void update_osd(void)
 {
 	//return;
@@ -859,6 +868,7 @@ static void update_osd(void)
 
 	osdMax7456.updateScreen();
 }
+//playuav hack end
 
 void setup() {
     cliSerial = hal.console;
