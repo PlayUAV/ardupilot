@@ -56,7 +56,10 @@ namespace AP_HAL {
         SPIDevice_MPU9250,
         SPIDevice_LSM9DS0_AM,
         SPIDevice_LSM9DS0_G,
+
+		//APM+ hack begin
 		SPIDevice_MAX7456,
+		//APM+ hack end
     };
 
 }

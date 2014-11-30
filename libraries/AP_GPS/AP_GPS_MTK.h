@@ -25,6 +25,8 @@
 #ifndef __AP_GPS_MTK_H__
 #define __AP_GPS_MTK_H__
 
+#if GPS_MTK_AVAILABLE
+
 #include <AP_GPS.h>
 #include "AP_GPS_MTK_Common.h"
 
@@ -81,4 +83,5 @@ private:
     static const prog_char _initialisation_blob[];
 };
 
+#endif //  GPS_MTK_AVAILABLE
 #endif  // __AP_GPS_MTK_H__

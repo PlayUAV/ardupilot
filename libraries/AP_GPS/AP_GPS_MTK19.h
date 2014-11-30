@@ -23,6 +23,8 @@
 #ifndef AP_GPS_MTK19_h
 #define AP_GPS_MTK19_h
 
+#if GPS_MTK19_AVAILABLE
+
 #include <AP_GPS.h>
 #include "AP_GPS_MTK_Common.h"
 
@@ -81,5 +83,6 @@ private:
         uint8_t bytes[];
     } _buffer;
 };
+#endif //  GPS_MTK19_AVAILABLE
 
 #endif  // AP_GPS_MTK19_H

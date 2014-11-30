@@ -24,6 +24,7 @@
 #include <AP_GPS.h>
 #include "AP_GPS_MTK.h"
 
+#if GPS_MTK_AVAILABLE
 // initialisation blobs to send to the GPS to try to get it into the
 // right mode
 const prog_char AP_GPS_MTK::_initialisation_blob[] PROGMEM = MTK_OUTPUT_5HZ SBAS_ON WAAS_ON MTK_NAVTHRES_OFF;
@@ -218,3 +219,4 @@ AP_GPS_MTK::_detect(struct MTK_detect_state &state, uint8_t data)
 	}
     return false;
 }
+#endif //  GPS_MTK_AVAILABLE

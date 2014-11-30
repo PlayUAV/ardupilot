@@ -294,9 +294,11 @@ static void init_ardupilot()
         hal.uartD->set_blocking_writes(false);
     }
 
+	//APM+ hack begin 
 	osdMax7456.init();
 	osdMax7456.osd_frame_type = 0;
 	osd_should_run = 1;
+	//APM+ hack end
 	
     cliSerial->print_P(PSTR("\nReady to FLY "));
 

@@ -21,6 +21,8 @@
 #ifndef __AP_GPS_SIRF_H__
 #define __AP_GPS_SIRF_H__
 
+#if GPS_SIRF_AVAILABLE
+
 #include <AP_HAL.h>
 #include <AP_Common.h>
 #include <AP_GPS.h>
@@ -105,5 +107,7 @@ private:
 
     static const uint8_t _initialisation_blob[];
 };
+
+#endif //  GPS_SIRF_AVAILABLE
 
 #endif // AP_GPS_SIRF_h

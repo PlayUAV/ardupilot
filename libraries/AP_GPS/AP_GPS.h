@@ -43,6 +43,12 @@
 #define GPS_RTK_AVAILABLE 0
 #endif
 
+//APM+ hack begin - disable not commonly used GPS protocol to get flash space
+#define GPS_MTK_AVAILABLE		0
+#define GPS_MTK19_AVAILABLE		0
+#define GPS_SIRF_AVAILABLE		0
+//APM+ hack end
+
 /**
  * save flash by skipping NMEA and SIRF support on ArduCopter on APM1/2 or any frame type on AVR1280 CPUs
  */
@@ -341,9 +347,15 @@ private:
         uint32_t last_baud_change_ms;
         uint8_t last_baud;
         struct UBLOX_detect_state ublox_detect_state;
+#if GPS_MTK_AVAILABLE
         struct MTK_detect_state mtk_detect_state;
+#endif
+#if GPS_MTK19_AVAILABLE
         struct MTK19_detect_state mtk19_detect_state;
+#endif
+#if GPS_SIRF_AVAILABLE
         struct SIRF_detect_state sirf_detect_state;
+#endif
         struct NMEA_detect_state nmea_detect_state;
 #if GPS_RTK_AVAILABLE
         struct SBP_detect_state sbp_detect_state;

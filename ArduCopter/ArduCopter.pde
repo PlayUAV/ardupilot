@@ -156,7 +156,11 @@
 #include <AP_Parachute.h>		// Parachute release library
 #endif
 #include <AP_Terrain.h>
+
+//APM+ hack begin 
 #include <AP_OSD_MAX7456.h>
+//APM+ hack end
+
 // AP_HAL to Arduino compatibility layer
 #include "compat.h"
 // Configuration
@@ -274,8 +278,11 @@ static AP_Baro_MS5611 barometer(&AP_Baro_MS5611::spi);
  #error Unrecognized CONFIG_BARO setting
 #endif
 static Baro_Glitch baro_glitch(barometer);
+
+//APM+ hack begin 
 static AP_OSD_MAX7456 osdMax7456;
 static int8_t osd_should_run = -1;
+//APM+ hack end
 
 #if CONFIG_COMPASS == HAL_COMPASS_PX4
 static AP_Compass_PX4 compass;
@@ -844,7 +851,10 @@ static const AP_Scheduler::Task scheduler_tasks[] PROGMEM = {
 #ifdef USERHOOK_SUPERSLOWLOOP
     { userhook_SuperSlowLoop,400,   10 },
 #endif
+
+	//APM+ hack begin 
 	{ update_osd,		    40,     10 },
+	//APM+ hack end
 };
 #else
 /*
@@ -910,7 +920,10 @@ static const AP_Scheduler::Task scheduler_tasks[] PROGMEM = {
 #ifdef USERHOOK_SUPERSLOWLOOP
     { userhook_SuperSlowLoop,100,   100 },
 #endif
+
+	//APM+ hack begin 
 	{ update_osd,		     10,     50 },
+	//APM+ hack end
 };
 #endif
 
@@ -931,6 +944,7 @@ void setup()
     scheduler.init(&scheduler_tasks[0], sizeof(scheduler_tasks)/sizeof(scheduler_tasks[0]));
 }
 
+//APM+ hack begin
 static void update_osd(void)
 {
 
@@ -968,6 +982,7 @@ static void update_osd(void)
 
 	osdMax7456.updateScreen();
 }
+//APM+ hack end 
 
 /*
   if the compass is enabled then try to accumulate a reading

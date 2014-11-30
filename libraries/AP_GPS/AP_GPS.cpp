@@ -85,7 +85,10 @@ const uint32_t AP_GPS::_baudrates[] PROGMEM = {4800U, 38400U, 115200U, 57600U, 9
 
 // initialisation blobs to send to the GPS to try to get it into the
 // right mode
-const prog_char AP_GPS::_initialisation_blob[] PROGMEM = UBLOX_SET_BINARY MTK_SET_BINARY SIRF_SET_BINARY;
+//APM+ hack begin - disable not commonly used GPS protocol to get flash space
+//const prog_char AP_GPS::_initialisation_blob[] PROGMEM = UBLOX_SET_BINARY MTK_SET_BINARY SIRF_SET_BINARY;
+const prog_char AP_GPS::_initialisation_blob[] PROGMEM = UBLOX_SET_BINARY;
+//APM+ hack end
 
 /*
   send some more initialisation string bytes if there is room in the
@@ -175,17 +178,21 @@ AP_GPS::detect_instance(uint8_t instance)
             AP_GPS_UBLOX::_detect(dstate->ublox_detect_state, data)) {
             hal.console->print_P(PSTR(" ublox "));
             new_gps = new AP_GPS_UBLOX(*this, state[instance], port);
-        } 
+        }
+#if GPS_MTK19_AVAILABLE
 		else if ((_type[instance] == GPS_TYPE_AUTO || _type[instance] == GPS_TYPE_MTK19) &&
                  AP_GPS_MTK19::_detect(dstate->mtk19_detect_state, data)) {
 			hal.console->print_P(PSTR(" MTK19 "));
 			new_gps = new AP_GPS_MTK19(*this, state[instance], port);
-		} 
+		}
+#endif
+#if GPS_MTK_AVAILABLE
 		else if ((_type[instance] == GPS_TYPE_AUTO || _type[instance] == GPS_TYPE_MTK) &&
                  AP_GPS_MTK::_detect(dstate->mtk_detect_state, data)) {
 			hal.console->print_P(PSTR(" MTK "));
 			new_gps = new AP_GPS_MTK(*this, state[instance], port);
 		}
+#endif
 #if GPS_RTK_AVAILABLE
         else if ((_type[instance] == GPS_TYPE_AUTO || _type[instance] == GPS_TYPE_SBP) &&
                  AP_GPS_SBP::_detect(dstate->sbp_detect_state, data)) {
@@ -195,11 +202,13 @@ AP_GPS::detect_instance(uint8_t instance)
 #endif // HAL_CPU_CLASS
 #if !defined(GPS_SKIP_SIRF_NMEA)
 		// save a bit of code space on a 1280
+#if GPS_SIRF_AVAILABLE
 		else if ((_type[instance] == GPS_TYPE_AUTO || _type[instance] == GPS_TYPE_SIRF) &&
                  AP_GPS_SIRF::_detect(dstate->sirf_detect_state, data)) {
 			hal.console->print_P(PSTR(" SIRF "));
 			new_gps = new AP_GPS_SIRF(*this, state[instance], port);
 		}
+#endif
 		else if (now - dstate->detect_started_ms > 5000) {
 			// prevent false detection of NMEA mode in
 			// a MTK or UBLOX which has booted in NMEA mode
