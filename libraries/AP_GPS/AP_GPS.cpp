@@ -85,10 +85,10 @@ const uint32_t AP_GPS::_baudrates[] PROGMEM = {4800U, 38400U, 115200U, 57600U, 9
 
 // initialisation blobs to send to the GPS to try to get it into the
 // right mode
-//APM+ hack begin - disable not commonly used GPS protocol to get flash space
+//playuav hack begin - disable not commonly used GPS protocol to get flash space
 //const prog_char AP_GPS::_initialisation_blob[] PROGMEM = UBLOX_SET_BINARY MTK_SET_BINARY SIRF_SET_BINARY;
 const prog_char AP_GPS::_initialisation_blob[] PROGMEM = UBLOX_SET_BINARY;
-//APM+ hack end
+//playuav hack end
 
 /*
   send some more initialisation string bytes if there is room in the

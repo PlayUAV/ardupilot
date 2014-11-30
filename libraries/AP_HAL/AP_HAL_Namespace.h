@@ -57,9 +57,9 @@ namespace AP_HAL {
         SPIDevice_LSM9DS0_AM,
         SPIDevice_LSM9DS0_G,
 
-		//APM+ hack begin
+		//playuav hack begin
 		SPIDevice_MAX7456,
-		//APM+ hack end
+		//playuav hack end
     };
 
 }

@@ -43,11 +43,11 @@
 #define GPS_RTK_AVAILABLE 0
 #endif
 
-//APM+ hack begin - disable not commonly used GPS protocol to get flash space
+//playuav hack begin - disable not commonly used GPS protocol to get flash space
 #define GPS_MTK_AVAILABLE		0
 #define GPS_MTK19_AVAILABLE		0
 #define GPS_SIRF_AVAILABLE		0
-//APM+ hack end
+//playuav hack end
 
 /**
  * save flash by skipping NMEA and SIRF support on ArduCopter on APM1/2 or any frame type on AVR1280 CPUs

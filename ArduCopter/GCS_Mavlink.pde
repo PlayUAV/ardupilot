@@ -1543,7 +1543,7 @@ void gcs_send_text_fmt(const prog_char_t *fmt, ...)
     }
 }
 
-//APM+ hack begin 
+//playuav hack begin 
 void GCS_MAVLINK::uploadFont(mavlink_channel_t chan)
 {
 
@@ -1628,4 +1628,4 @@ void GCS_MAVLINK::uploadFont(mavlink_channel_t chan)
 
 	//  character_bitmap[]
 }
-//APM+ hack end 
+//playuav hack end 
