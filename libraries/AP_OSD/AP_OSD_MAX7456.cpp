@@ -316,7 +316,7 @@ bool AP_OSD_MAX7456::init()
 void AP_OSD_MAX7456::clear()
 {
 	if (!_spi_sem->take(10)){
-		hal.console->printf_P(PSTR("TTTest - AP_OSD_MAX7456::clear() can not get sem\n"));
+		hal.console->printf_P(PSTR("AP_OSD_MAX7456::clear() can not get sem\n"));
 		return ;
 	}
 
@@ -446,7 +446,7 @@ void AP_OSD_MAX7456::showAt10HZ()
 {
 	// SPI select max7456 
 	if (!_spi_sem->take_nonblocking()){
-		hal.console->printf_P(PSTR("TTTest - AP_OSD_MAX7456::showAt10HZ() can not get sem\n"));
+		hal.console->printf_P(PSTR("AP_OSD_MAX7456::showAt10HZ() can not get sem\n"));
 		return ;
 	}
 
@@ -517,7 +517,7 @@ void AP_OSD_MAX7456::showAt3HZ()
 {
 	// SPI select max7456 
 	if (!_spi_sem->take_nonblocking()){
-		hal.console->printf_P(PSTR("TTTest - AP_OSD_MAX7456::showAt3HZ() can not get sem\n"));
+		hal.console->printf_P(PSTR("AP_OSD_MAX7456::showAt3HZ() can not get sem\n"));
 		return ;
 	}
 
@@ -575,7 +575,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 {
 	// SPI select max7456 
 	if (!_spi_sem->take_nonblocking()){
-		hal.console->printf_P(PSTR("TTTest - AP_OSD_MAX7456::showAt1HZ() can not get sem\n"));
+		hal.console->printf_P(PSTR("AP_OSD_MAX7456::showAt1HZ() can not get sem\n"));
 		return ;
 	}
 
@@ -785,7 +785,7 @@ void AP_OSD_MAX7456::write_NVM(uint32_t font_count, uint8_t *character_bitmap)
 	char_address_lo = 0;
 	  
 	if (!_spi_sem->take_nonblocking()) {
-		hal.console->printf_P(PSTR("TTTest - AP_OSD_MAX7456::write_NVM() can not get sem\n"));
+		hal.console->printf_P(PSTR("AP_OSD_MAX7456::write_NVM() can not get sem\n"));
 		return;
 	}
 
@@ -831,7 +831,7 @@ void AP_OSD_MAX7456::write_NVM(uint32_t font_count, uint8_t *character_bitmap)
 //	char_address_lo = 0;  
 //
 //	if (!_spi_sem->take_nonblocking()) {
-//		hal.console->printf_P(PSTR("TTTest - AP_OSD_MAX7456::read_one_char_from_NVM() can not get sem\n"));
+//		hal.console->printf_P(PSTR("AP_OSD_MAX7456::read_one_char_from_NVM() can not get sem\n"));
 //		return;
 //	}
 //
@@ -878,7 +878,7 @@ void AP_OSD_MAX7456::write_NVM(uint32_t font_count, uint8_t *character_bitmap)
 //	//for testing
 //	for(x = 0; x < NVM_ram_size; x++)
 //	{
-//		hal.console->printf_P(PSTR("TTTest - 4-pixel data: %u\n"), character_bitmap[x]);
+//		hal.console->printf_P(PSTR("ReadFont - 4-pixel data: %u\n"), character_bitmap[x]);
 //	}
 //	
 //}
