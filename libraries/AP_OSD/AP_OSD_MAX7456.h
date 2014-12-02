@@ -16,7 +16,7 @@ public:
 	bool            init();
 
 	//update charsets
-	void			write_NVM(uint32_t font_count, uint8_t *character_bitmap);
+	//void			write_NVM(uint32_t font_count, uint8_t *character_bitmap);
 	//void			read_one_char_from_NVM(uint32_t font_count);
 
 	//update the screen

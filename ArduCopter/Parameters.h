@@ -124,7 +124,7 @@ public:
         k_param_optflow,
         k_param_dcmcheck_thresh,        // 59
         k_param_log_bitmask,
-		k_param_osdMax7456,				//61
+		
 		
         // 65: AP_Limits Library
         k_param_limits = 65,            // deprecated - remove
@@ -312,6 +312,8 @@ public:
         k_param_acro_balance_roll,
         k_param_acro_balance_pitch,
         k_param_acro_yaw_p, // 244
+
+		k_param_osdMax7456,				//245
 
         // 254,255: reserved
     };

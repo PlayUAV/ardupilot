@@ -128,7 +128,7 @@ const AP_Param::GroupInfo AP_OSD_MAX7456::var_info[] PROGMEM = {
 	AP_GROUPINFO("HEAD", 15, AP_OSD_MAX7456, _bEnableHead, 1),
 	AP_GROUPINFO("HEAD_ROSE", 16, AP_OSD_MAX7456, _bEnableHeadRose, 1),
 	AP_GROUPINFO("BATT_CON", 17, AP_OSD_MAX7456, _iEnableCurConsume, 1),
-	//AP_GROUPINFO("VIDEO_MODE", 17, AP_OSD_MAX7456, _iMode, 1),
+	AP_GROUPINFO("VIDEO_MODE", 18, AP_OSD_MAX7456, _iMode, 1),
 	//AP_GROUPINFO("RSSI", 18, AP_OSD_MAX7456, _iEnableRSSI, 1),
 	
 
@@ -775,50 +775,50 @@ void AP_OSD_MAX7456::printHit(uint8_t col, uint8_t row, uint8_t subval)
 
 }
 
-void AP_OSD_MAX7456::write_NVM(uint32_t font_count, uint8_t *character_bitmap)
-{
-	uint8_t x;
-	uint8_t char_address_hi, char_address_lo;
-	uint8_t screen_char;
-
-	char_address_hi = font_count;
-	char_address_lo = 0;
-	  
-	if (!_spi_sem->take_nonblocking()) {
-		hal.console->printf_P(PSTR("AP_OSD_MAX7456::write_NVM() can not get sem\n"));
-		return;
-	}
-
-	// disable display
-	_spi->cs_assert();
-	_spi->transfer(MAX7456_VM0_reg); 
-	_spi->transfer(MAX7456_DISABLE_display);
-
-	_spi->transfer(MAX7456_CMAH_reg); // set start address high
-	_spi->transfer(char_address_hi);
-
-	for(x = 0; x < NVM_ram_size; x++) // write out 54 (out of 64) uint8_ts of character to shadow ram
-	{
-		screen_char = character_bitmap[x];
-		_spi->transfer(MAX7456_CMAL_reg); // set start address low
-		_spi->transfer(x);
-		_spi->transfer(MAX7456_CMDI_reg);
-		_spi->transfer(screen_char);
-	}
-
-	// transfer a 54 uint8_ts from shadow ram to NVM
-	_spi->transfer(MAX7456_CMM_reg);
-	_spi->transfer(WRITE_nvr);
-
-	// wait until bit 5 in the status register returns to 0 (12ms)
-	while ((_spi->transfer(MAX7456_STAT_reg_read) & STATUS_reg_nvr_busy) != 0x00);
-
-	_spi->transfer(MAX7456_VM0_reg); // turn on screen next vertical
-	_spi->transfer(MAX7456_ENABLE_display_vert);
-	_spi->cs_release(); 
-
-	_spi_sem->give();
-}
+//void AP_OSD_MAX7456::write_NVM(uint32_t font_count, uint8_t *character_bitmap)
+//{
+//	uint8_t x;
+//	uint8_t char_address_hi, char_address_lo;
+//	uint8_t screen_char;
+//
+//	char_address_hi = font_count;
+//	char_address_lo = 0;
+//	  
+//	if (!_spi_sem->take_nonblocking()) {
+//		hal.console->printf_P(PSTR("AP_OSD_MAX7456::write_NVM() can not get sem\n"));
+//		return;
+//	}
+//
+//	// disable display
+//	_spi->cs_assert();
+//	_spi->transfer(MAX7456_VM0_reg); 
+//	_spi->transfer(MAX7456_DISABLE_display);
+//
+//	_spi->transfer(MAX7456_CMAH_reg); // set start address high
+//	_spi->transfer(char_address_hi);
+//
+//	for(x = 0; x < NVM_ram_size; x++) // write out 54 (out of 64) uint8_ts of character to shadow ram
+//	{
+//		screen_char = character_bitmap[x];
+//		_spi->transfer(MAX7456_CMAL_reg); // set start address low
+//		_spi->transfer(x);
+//		_spi->transfer(MAX7456_CMDI_reg);
+//		_spi->transfer(screen_char);
+//	}
+//
+//	// transfer a 54 uint8_ts from shadow ram to NVM
+//	_spi->transfer(MAX7456_CMM_reg);
+//	_spi->transfer(WRITE_nvr);
+//
+//	// wait until bit 5 in the status register returns to 0 (12ms)
+//	while ((_spi->transfer(MAX7456_STAT_reg_read) & STATUS_reg_nvr_busy) != 0x00);
+//
+//	_spi->transfer(MAX7456_VM0_reg); // turn on screen next vertical
+//	_spi->transfer(MAX7456_ENABLE_display_vert);
+//	_spi->cs_release(); 
+//
+//	_spi_sem->give();
+//}
 
 
 //void AP_OSD_MAX7456::read_one_char_from_NVM(uint32_t font_count)
