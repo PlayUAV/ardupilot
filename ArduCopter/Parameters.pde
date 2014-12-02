@@ -1120,6 +1120,11 @@ const AP_Param::Info var_info[] PROGMEM = {
     // @Path: ../libraries/AP_RCMapper/AP_RCMapper.cpp
     GOBJECT(rcmap, "RCMAP_",        RCMapper),
 
+	// OSD driver
+    // @Group: OSD_
+    // @Path: ../libraries/AP_OSD/AP_OSD_MAX7456.cpp
+    GOBJECT(osdMax7456, "OSD_", AP_OSD_MAX7456),
+
     AP_VAREND
 };
 

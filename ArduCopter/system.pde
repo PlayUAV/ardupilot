@@ -295,6 +295,12 @@ static void init_ardupilot()
 #if LOGGING_ENABLED == ENABLED
     Log_Write_Startup();
 #endif
+	
+	//playuav hack begin 
+	osdMax7456.init();
+	osdMax7456.osd_frame_type = 0;
+	osd_should_run = 1;
+	//playuav hack end
 
     cliSerial->print_P(PSTR("\nReady to FLY "));
 }

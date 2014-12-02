@@ -148,6 +148,10 @@
 #include "Parameters.h"
 #include "GCS.h"
 
+//playuav hack begin 
+#include <AP_OSD_MAX7456.h>
+//playuav hack end
+
 ////////////////////////////////////////////////////////////////////////////////
 // cliSerial
 ////////////////////////////////////////////////////////////////////////////////
@@ -226,6 +230,11 @@ static const AP_InertialSensor::Sample_rate ins_sample_rate = AP_InertialSensor:
 // All GPS access should be through this pointer.
 static GPS         *g_gps;
 static GPS_Glitch   gps_glitch(g_gps);
+
+//playuav hack begin 
+static AP_OSD_MAX7456 osdMax7456;
+static int8_t osd_should_run = -1;
+//playuav hack end
 
 // flight modes convenience array
 static AP_Int8 *flight_modes = &g.flight_mode1;
@@ -314,6 +323,7 @@ static AP_Compass_HIL          compass;
 static AP_GPS_HIL              g_gps_driver;
 static AP_InertialSensor_HIL   ins;
 static AP_AHRS_DCM             ahrs(ins, g_gps);
+
 
 
  #if CONFIG_HAL_BOARD == HAL_BOARD_AVR_SITL
@@ -888,8 +898,50 @@ static const AP_Scheduler::Task scheduler_tasks[] PROGMEM = {
 #ifdef USERHOOK_SUPERSLOWLOOP
     { userhook_SuperSlowLoop,100,   100 },
 #endif
+	//playuav hack begin 
+	{ update_osd,		     10,     50 },
+	//playuav hack end
 };
 
+//playuav hack begin
+static void update_osd(void)
+{
+
+	if(osd_should_run <0)
+		return;
+
+	osdMax7456._BatteryVol = battery.voltage();
+	osdMax7456._BatteryCurrent = battery.current_amps() * 100;
+	osdMax7456._BatteryPercent = battery.capacity_remaining_pct();
+	osdMax7456._BatteryConsum =  battery.current_total_mah();	//Total current consume since start up in amp/h
+
+	osdMax7456._GPSSats = g_gps->num_sats;
+	osdMax7456._GPSLongitudePrint = current_loc.lng * 0.0000000001;
+	osdMax7456._GPSLatitudePrint = current_loc.lat * 0.0000000001;
+
+	osdMax7456._groundSpeed = ahrs.groundspeed();
+	osdMax7456._heading = (ahrs.yaw_sensor / 100) % 360;
+	osdMax7456._throttle = g.rc_3.servo_out * 0.1;
+	osdMax7456._altitude = current_loc.alt * 0.01;
+	//float climbRate = climb_rate / 100.0f;
+
+	osdMax7456._pitch = ahrs.pitch * 57.2957795131;		//to degree *180/pi
+	osdMax7456._roll = ahrs.roll * 57.2957795131;		//to degree *180/pi
+	//int8_t yaw = ahrs.yaw * 57.2957795131;		//to degree *180/pi
+
+	osdMax7456._WPDirection = wp_bearing*0.01;
+	osdMax7456._WPDistance = wp_distance;
+	//uint8_t wayPointNum = mission.get_current_nav_index();
+	
+	osdMax7456._homeDirection = home_bearing*0.01;
+	osdMax7456._homeDistance = home_distance;
+
+	osdMax7456._flyMode = control_mode;
+	osdMax7456._startTime = hal.scheduler->millis()*0.001f;
+
+	osdMax7456.updateScreen();
+}
+//playuav hack end 
 
 void setup() 
 {
