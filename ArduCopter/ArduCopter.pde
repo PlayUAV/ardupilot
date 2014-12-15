@@ -956,7 +956,7 @@ static void update_osd(void)
 	osdMax7456._BatteryPercent = battery.capacity_remaining_pct();
 	osdMax7456._BatteryConsum =  battery.current_total_mah();	//Total current consume since start up in amp/h
 
-	osdMax7456._GPSSats = gps.status(0);
+	osdMax7456._GPSSats = gps.num_sats(0);
 	osdMax7456._GPSLongitudePrint = current_loc.lng * 0.0000000001;
 	osdMax7456._GPSLatitudePrint = current_loc.lat * 0.0000000001;
 

@@ -26,7 +26,7 @@
 //#define AUTOTUNE_ENABLED      DISABLED            // disable the auto tune functionality to save 7k of flash
 #define AC_FENCE              DISABLED            // disable fence to save 2k of flash
 #define CAMERA                DISABLED            // disable camera trigger to save 1k of flash
-//#define CONFIG_SONAR          DISABLED            // disable sonar to save 1k of flash
+#define CONFIG_SONAR          DISABLED            // disable sonar to save 1k of flash
 //#define POSHOLD_ENABLED       DISABLED            // disable PosHold flight mode to save 4.5k of flash
 
 // features below are disabled by default on APM (but enabled on Pixhawk)

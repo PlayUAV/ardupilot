@@ -635,7 +635,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 		else if (_flyMode == 13) mode_str = "sprt"; //Sport: earth frame rate control
 		else if (_flyMode == 14) mode_str = "flip"; //Flip: flip the vehicle on the roll axis
 		else if (_flyMode == 15) mode_str = "atun"; //Auto Tune: autotune the vehicle's roll and pitch gains
-		else if (_flyMode == 16) mode_str = "hybr"; //Hybrid: position hold with manual override
+		else if (_flyMode == 16) mode_str = "posh"; //Hybrid: position hold with manual override
 	}
 	
 
