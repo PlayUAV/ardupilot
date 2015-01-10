@@ -170,7 +170,7 @@ AP_OSD_MAX7456::AP_OSD_MAX7456()
 	_panThrottle_XY[0] = 1;
 	_panThrottle_XY[1] = 2;
 
-	_panVehicleAlt_XY[0] = 22;
+	_panVehicleAlt_XY[0] = 21;
 	_panVehicleAlt_XY[1] = 8;
 
 	_panPitch_XY[0] = 8;
@@ -179,7 +179,7 @@ AP_OSD_MAX7456::AP_OSD_MAX7456()
 	_panRoll_XY[0] = 14;
 	_panRoll_XY[1] = 2;
 
-	_panHomeDir_XY[0] = 22;
+	_panHomeDir_XY[0] = 21;
 	_panHomeDir_XY[1] = 2;
 
 	_panHomeDist_XY[0] = 22;
@@ -188,10 +188,10 @@ AP_OSD_MAX7456::AP_OSD_MAX7456()
 	_panRSSI_XY[0] = 23;
 	_panRSSI_XY[1] = 4;
 
-	_panMode_XY[0] = 22;
+	_panMode_XY[0] = 21;
 	_panMode_XY[1] = 5;
 
-	_panTime_XY[0] = 23;
+	_panTime_XY[0] = 22;
 	_panTime_XY[1] = 6;
 
 	_panHorizon_XY[0] = 8;
@@ -203,17 +203,17 @@ AP_OSD_MAX7456::AP_OSD_MAX7456()
 	_panGPSCoord_XY[0] = 1;
 	_panGPSCoord_XY[1] = 11;
 
-	_panBatteryVol_XY[0] = 22;
+	_panBatteryVol_XY[0] = 21;
 	_panBatteryVol_XY[1] = 9;
 
 	_panBatteryCurrent_XY[0] = 22;
 	_panBatteryCurrent_XY[1] = 10;
 
-	_panBatteryConsume_XY[0] = 19;
-	_panBatteryConsume_XY[1] = 11;
+	_panBatteryConsume_XY[0] = 21;
+	_panBatteryConsume_XY[1] = 12;
 
-	_panBatteryPercent_XY[0] = 22;
-	_panBatteryPercent_XY[1] = 12;
+	_panBatteryPercent_XY[0] = 24;
+	_panBatteryPercent_XY[1] = 11;
 
 	_panWPDir_XY[0] = 1;
 	_panWPDir_XY[1] = 4;
@@ -253,8 +253,8 @@ bool AP_OSD_MAX7456::init()
 		
 		_panBatteryVol_XY[1] = 10;
 		_panBatteryCurrent_XY[1] = 11;
-		_panBatteryConsume_XY[1] = 12;
-		_panBatteryPercent_XY[1] = 13;
+		_panBatteryConsume_XY[1] = 13;
+		_panBatteryPercent_XY[1] = 12;
 	}
 
 	_spi->cs_assert();
@@ -296,7 +296,7 @@ bool AP_OSD_MAX7456::init()
 
 	_spi_sem->give();
 
-	for(_HorizonHitIndex=0;_HorizonHitIndex < 12; _HorizonHitIndex++)
+	for(_HorizonHitIndex=0;_HorizonHitIndex < HORIZON_LEN; _HorizonHitIndex++)
 	{
 		_lastHorizonColHit[_HorizonHitIndex] = _panHorizon_XY[0] + 1;
 		_lastHorizonRowHit[_HorizonHitIndex] = _panHorizon_XY[1];
@@ -331,11 +331,11 @@ void AP_OSD_MAX7456::clear()
 
 	setPanel(_panHorizon_XY[0], _panHorizon_XY[1]);
 	openPanel();
-	printf_P(PSTR("\xDA\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xDB|"));
-	printf_P(PSTR("\xDA\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xDB|"));
-	printf_P(PSTR("\xD8\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xD9|"));
-	printf_P(PSTR("\xDA\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xDB|"));
-	printf_P(PSTR("\xDA\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xDB"));
+	printf_P(PSTR("\xDA\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xDB|"));
+	printf_P(PSTR("\xDA\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xDB|"));
+	printf_P(PSTR("\xD8\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xD9|"));
+	printf_P(PSTR("\xDA\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xDB|"));
+	printf_P(PSTR("\xDA\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xDB"));
 	closePanel();
 
 	_spi_sem->give();
@@ -657,7 +657,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 	{
 		setPanel(_panBatteryConsume_XY[0], _panBatteryConsume_XY[1]);
 		openPanel();
-		printf("%c%c%5i%c%c%c", 0xeb, 0xcb, (int)_BatteryConsum, 0xb6, 0xb7, 0xc9);
+		printf("%c%c%5i", 0xeb, 0xcb, (int)_BatteryConsum);
 		closePanel();
 	}
 
@@ -666,7 +666,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 	{
 		setPanel(_panBatteryVol_XY[0], _panBatteryVol_XY[1]);
 		openPanel();
-		printf("%c%c%5.2f%c", 0xCB, 0xCC, (double)_BatteryVol, 0x8e);
+		printf("%c%5.2f%c", 0xCB, (double)_BatteryVol, 0x8e);
 		closePanel();
 	}
 
@@ -675,7 +675,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 	{
 		setPanel(_panBatteryCurrent_XY[0], _panBatteryCurrent_XY[1]);
 		openPanel();
-		printf("%c%c%5.2f%c", 0xCB, 0xCD, (float(_BatteryCurrent) * .01), 0x8F);
+		printf("%5.2f%c", (float(_BatteryCurrent) * .01), 0x8F);
 		closePanel();
 	}
 
@@ -684,7 +684,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 	{
 		setPanel(_panBatteryPercent_XY[0], _panBatteryPercent_XY[1]);
 		openPanel();
-		printf("%c%c%3.0i%c", 0xCB, 0xCE, _BatteryPercent, 0x25);
+		printf("%3.0i%c", _BatteryPercent, 0x25);
 		closePanel();
 	}
 
@@ -728,7 +728,7 @@ void AP_OSD_MAX7456::showArrow(uint8_t rotate_arrow, uint8_t mode)
 void AP_OSD_MAX7456::showHorizon(uint8_t start_col, uint8_t start_row) 
 { 
 	int x, nose, row, minval, hit, subval = 0;
-	const int cols = 12;
+	const int cols = HORIZON_LEN;
 	const int rows = 5;
 	int col_hit[cols];
 	float  pitch, roll;
@@ -738,7 +738,7 @@ void AP_OSD_MAX7456::showHorizon(uint8_t start_col, uint8_t start_row)
 
 	nose = round(tan(pitch) * (rows*9));
 	for(int col=1;col <= cols;col++){
-		x = (col * 12) - (cols * 6) - 6;//center X point at middle of each col
+		x = (col * HORIZON_LEN) - (cols * 6) - 6;//center X point at middle of each col
 		col_hit[col-1] = (tan(roll) * x) + nose + (rows*9) - 1;//calculating hit point on Y plus offset to eliminate negative values
 		//col_hit[(col-1)] = nose + (rows * 9);
 	}

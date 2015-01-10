@@ -7,6 +7,7 @@
 #include <AP_Param.h>
 #include "AP_OSD_Stream.h"
 
+#define HORIZON_LEN	11
 
 class AP_OSD_MAX7456 : public AP_OSD_Stream
 {
@@ -118,8 +119,8 @@ private:
 	uint32_t		_lastUpdate10HZ;
 	uint32_t		_lastUpdate3HZ;
 	uint32_t		_lastUpdate1HZ;
-	uint8_t			_lastHorizonColHit[12];
-	uint8_t			_lastHorizonRowHit[12];
+	uint8_t			_lastHorizonColHit[HORIZON_LEN];
+	uint8_t			_lastHorizonRowHit[HORIZON_LEN];
 	uint8_t			_HorizonHitIndex;
 
 	
