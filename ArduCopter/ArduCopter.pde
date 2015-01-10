@@ -957,6 +957,7 @@ static void update_osd(void)
 	osdMax7456._BatteryConsum =  battery.current_total_mah();	//Total current consume since start up in amp/h
 
 	osdMax7456._GPSSats = gps.num_sats(0);
+	osdMax7456._iGPSStatus = (uint8_t)gps.status();
 	osdMax7456._GPSLongitudePrint = current_loc.lng * 0.0000000001;
 	osdMax7456._GPSLatitudePrint = current_loc.lat * 0.0000000001;
 
@@ -979,6 +980,15 @@ static void update_osd(void)
 
 	osdMax7456._flyMode = control_mode;
 	osdMax7456._startTime = hal.scheduler->millis()*0.001f;
+
+	// we are armed if we are not initialising
+    if (motors.armed()) {
+        osdMax7456._iMotorArmed = 1;
+    }
+	else
+	{
+		osdMax7456._iMotorArmed = 0;
+	}
 
 	osdMax7456.updateScreen();
 }

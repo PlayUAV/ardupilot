@@ -61,6 +61,8 @@ public:
 	int32_t		_WPDirection;
 	int32_t		_WPDistance;
 	float		_heading;
+	uint8_t		_iMotorArmed;
+	uint8_t		_iGPSStatus;
 protected:
 	//parameters which can be set from the ground station
 	AP_Int8		_bEnableSpeed;				//if show the speed
@@ -83,6 +85,7 @@ protected:
 	AP_Int8		_iMode;
 	AP_Int8		_iEnableRSSI;
 	AP_Int8		_iEnableCurConsume;
+	
 
 	//pisition
 	uint8_t		_panSpeed_XY[2];
@@ -104,9 +107,11 @@ protected:
 	uint8_t		_panWPDir_XY[2];
 	uint8_t		_panWPDist_XY[2];
 	uint8_t		_panRSSI_XY[2];
+	uint8_t		_panWarning_XY[2];
 private:
 	void showArrow(uint8_t rotate_arrow, uint8_t mode);	
 	void showHorizon(uint8_t start_col, uint8_t start_row);
+	void showWarning();
 	void printHit(uint8_t col, uint8_t row, uint8_t subval);
 	void showAt10HZ();
 	void showAt3HZ();

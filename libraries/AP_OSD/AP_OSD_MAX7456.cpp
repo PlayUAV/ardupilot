@@ -156,7 +156,9 @@ AP_OSD_MAX7456::AP_OSD_MAX7456()
  _BatteryCurrent(0.0),
  _BatteryPercent(0),
  _WPDirection(0),
- _WPDistance(0)
+ _WPDistance(0),
+ _iMotorArmed(0),
+ _iGPSStatus(0)
 {
 	AP_Param::setup_object_defaults(this, var_info);
 	
@@ -220,6 +222,9 @@ AP_OSD_MAX7456::AP_OSD_MAX7456()
 
 	_panWPDist_XY[0] = 2;
 	_panWPDist_XY[1] = 5;
+
+	_panWarning_XY[0] = 6;
+	_panWarning_XY[1] = 1;
 
 	_heading = 0.0;
 }
@@ -579,6 +584,8 @@ void AP_OSD_MAX7456::showAt1HZ()
 		return ;
 	}
 
+	showWarning();
+
 	if(_bEnableHome)
 	{
 		// home direction, size 1 x 5
@@ -707,6 +714,29 @@ void AP_OSD_MAX7456::showAt1HZ()
 
 	//SPI release
 	_spi_sem->give();
+}
+
+void AP_OSD_MAX7456::showWarning()
+{
+	setPanel(_panWarning_XY[0], _panWarning_XY[1]);
+	openPanel();
+	
+	char* warning_string;
+	warning_string = "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20";
+	
+	if(_iGPSStatus < 2)
+	{
+		//No GPS Fix
+		warning_string = "\x20\x4E\x6F\x20\x47\x50\x53\x20\x66\x69\x78\x21";
+	}
+	else if(_iMotorArmed == 0)
+	{
+		//no armed
+		warning_string = "\x20\x20\x44\x49\x53\x41\x52\x4d\x45\x44\x20\x20";
+	}
+
+	printf("%s",warning_string);
+	closePanel();
 }
 
 void AP_OSD_MAX7456::showArrow(uint8_t rotate_arrow, uint8_t mode) 
