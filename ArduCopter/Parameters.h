@@ -312,6 +312,10 @@ public:
         k_param_acro_balance_pitch,
         k_param_acro_yaw_p, // 244
 
+		//playuav hack begin
+		k_param_osdMax7456,				//245
+		//playuav hack end
+
         // 254,255: reserved
     };
 

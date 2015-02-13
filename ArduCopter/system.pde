@@ -294,6 +294,12 @@ static void init_ardupilot()
         hal.uartD->set_blocking_writes(false);
     }
 
+	//playuav hack begin 
+	osdMax7456.init();
+	osdMax7456.osd_frame_type = 0;
+	osd_should_run = 1;
+	//playuav hack end
+
     cliSerial->print_P(PSTR("\nReady to FLY "));
 
     // flag that initialisation has completed

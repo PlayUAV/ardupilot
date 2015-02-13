@@ -157,6 +157,10 @@
 #endif
 #include <AP_Terrain.h>
 
+//playuav hack begin 
+#include <AP_OSD_MAX7456.h>
+//playuav hack end
+
 // AP_HAL to Arduino compatibility layer
 #include "compat.h"
 // Configuration
@@ -274,6 +278,11 @@ static AP_Baro_MS5611 barometer(&AP_Baro_MS5611::spi);
  #error Unrecognized CONFIG_BARO setting
 #endif
 static Baro_Glitch baro_glitch(barometer);
+
+//playuav hack begin 
+static AP_OSD_MAX7456 osdMax7456;
+static int8_t osd_should_run = -1;
+//playuav hack end
 
 #if CONFIG_COMPASS == HAL_COMPASS_PX4
 static AP_Compass_PX4 compass;
@@ -825,6 +834,10 @@ static const AP_Scheduler::Task scheduler_tasks[] PROGMEM = {
 #ifdef USERHOOK_SUPERSLOWLOOP
     { userhook_SuperSlowLoop,400,   10 },
 #endif
+
+	//playuav hack begin 
+	{ update_osd,		    40,     10 },
+	//playuav hack end
 };
 #else
 /*
@@ -890,6 +903,9 @@ static const AP_Scheduler::Task scheduler_tasks[] PROGMEM = {
 #ifdef USERHOOK_SUPERSLOWLOOP
     { userhook_SuperSlowLoop,100,   100 },
 #endif
+	//playuav hack begin 
+	{ update_osd,		     10,     50 },
+	//playuav hack end
 };
 #endif
 
@@ -909,6 +925,56 @@ void setup()
     // initialise the main loop scheduler
     scheduler.init(&scheduler_tasks[0], sizeof(scheduler_tasks)/sizeof(scheduler_tasks[0]));
 }
+
+//playuav hack begin
+static void update_osd(void)
+{
+
+	if(osd_should_run <0)
+		return;
+
+	osdMax7456._BatteryVol = battery.voltage();
+	osdMax7456._BatteryCurrent = battery.current_amps() * 100;
+	osdMax7456._BatteryPercent = battery.capacity_remaining_pct();
+	osdMax7456._BatteryConsum =  battery.current_total_mah();	//Total current consume since start up in amp/h
+
+	osdMax7456._GPSSats = gps.num_sats(0);
+	osdMax7456._iGPSStatus = (uint8_t)gps.status();
+	osdMax7456._GPSLongitudePrint = current_loc.lng * 0.0000000001;
+	osdMax7456._GPSLatitudePrint = current_loc.lat * 0.0000000001;
+
+	osdMax7456._groundSpeed = ahrs.groundspeed();
+	osdMax7456._heading = (ahrs.yaw_sensor / 100) % 360;
+	osdMax7456._throttle = g.rc_3.servo_out * 0.1;
+	osdMax7456._altitude = current_loc.alt * 0.01;
+	//float climbRate = climb_rate / 100.0f;
+
+	osdMax7456._pitch = ahrs.pitch * 57.2957795131;		//to degree *180/pi
+	osdMax7456._roll = ahrs.roll * 57.2957795131;		//to degree *180/pi
+	//int8_t yaw = ahrs.yaw * 57.2957795131;		//to degree *180/pi
+
+	osdMax7456._WPDirection = wp_bearing*0.01;
+	osdMax7456._WPDistance = wp_distance;
+	//uint8_t wayPointNum = mission.get_current_nav_index();
+	
+	osdMax7456._homeDirection = home_bearing*0.01;
+	osdMax7456._homeDistance = home_distance;
+
+	osdMax7456._flyMode = control_mode;
+	osdMax7456._startTime = hal.scheduler->millis()*0.001f;
+
+	// we are armed if we are not initialising
+    if (motors.armed()) {
+        osdMax7456._iMotorArmed = 1;
+    }
+	else
+	{
+		osdMax7456._iMotorArmed = 0;
+	}
+
+	osdMax7456.updateScreen();
+}
+//playuav hack end 
 
 /*
   if the compass is enabled then try to accumulate a reading
