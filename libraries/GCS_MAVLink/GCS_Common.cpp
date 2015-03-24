@@ -871,21 +871,21 @@ GCS_MAVLINK::update(void (*run_cli)(AP_HAL::UARTDriver *))
     {
         uint8_t c = comm_receive_ch(chan);
 
-		////playuav hack begin - detecting the beginning of uploading font
-		//if (mavlink_active == 0 && (hal.scheduler->millis() - _cli_timeout) < 20000) {
-		//	if (c == '*') {
-		//		star_count++;
-		//	}
-		//	else if(c != '\n' && c != '\r'){
-		//		star_count = 0;
-		//	}
+		//playuav hack begin - detecting the beginning of uploading font
+		if (mavlink_active == 0 && (hal.scheduler->millis() - _cli_timeout) < 20000) {
+			if (c == '*') {
+				star_count++;
+			}
+			else if(c != '\n' && c != '\r'){
+				star_count = 0;
+			}
 
-		//	if(star_count>=3){
-		//		uploadFont(chan);
-		//		star_count = 0;
-		//	}
-		//}
-		////playuav hack end
+			if(star_count>=3){
+				uploadFont(chan);
+				star_count = 0;
+			}
+		}
+		//playuav hack end
 
         if (run_cli != NULL) {
             /* allow CLI to be started by hitting enter 3 times, if no

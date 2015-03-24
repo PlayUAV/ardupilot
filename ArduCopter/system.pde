@@ -293,7 +293,7 @@ static void init_ardupilot()
     if (hal.uartD != NULL) {
         hal.uartD->set_blocking_writes(false);
     }
-
+	
 	//playuav hack begin 
 	osdMax7456.init();
 	osdMax7456.osd_frame_type = 0;

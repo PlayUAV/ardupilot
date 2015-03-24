@@ -951,6 +951,8 @@ static void update_osd(void)
 	if(osd_should_run <0)
 		return;
 
+	//return;
+
 	osdMax7456._BatteryVol = battery.voltage();
 	osdMax7456._BatteryCurrent = battery.current_amps() * 100;
 	osdMax7456._BatteryPercent = battery.capacity_remaining_pct();
