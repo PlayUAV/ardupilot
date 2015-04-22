@@ -815,7 +815,7 @@ void AP_OSD_MAX7456::write_NVM(uint32_t font_count, uint8_t *character_bitmap)
 	char_address_lo = 0;
 	  
 	//if (!_spi_sem->take_nonblocking()) {
-	if (!_spi_sem->take(1000)) {
+	if (!_spi_sem->take(3000)) {
 		hal.console->printf_P(PSTR("AP_OSD_MAX7456::write_NVM() can not get sem\n"));
 		return;
 	}
