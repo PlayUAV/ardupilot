@@ -61,7 +61,8 @@ namespace AP_HAL {
         SPIDevice_Ublox             = 11,
 
 		//playuav hack begin
-		SPIDevice_MAX7456           = 12,
+		SPIDevice_MAX7456Onboard       = 12,
+		SPIDevice_MAX7456Ext           = 13,
 		//playuav hack end
     };
 

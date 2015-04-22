@@ -31,7 +31,8 @@ private:
     AVRSPI0DeviceDriver* _optflow_spi0;
 
 	//playuav hack begin
-	AVRSPI0DeviceDriver* _max7456;
+	AVRSPI0DeviceDriver* _max7456Onboard;
+	AVRSPI0DeviceDriver* _max7456Ext;
 	//playuav hack end
 
     AVRSPI3DeviceDriver* _dataflash;
