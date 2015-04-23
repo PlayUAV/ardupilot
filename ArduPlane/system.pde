@@ -107,6 +107,12 @@ static void init_ardupilot()
     // used to detect in-flight resets
     g.num_resets.set_and_save(g.num_resets+1);
 
+	//playuav hack begin
+	osdMax7456.init();
+	osdMax7456.osd_frame_type = 1;
+	osd_should_run = 1;
+	//playuav hack end
+
     // init baro before we start the GCS, so that the CLI baro test works
     barometer.init();
 
@@ -214,12 +220,6 @@ static void init_ardupilot()
     set_nav_controller();
 
     set_mode(MANUAL);
-
-	//playuav hack begin
-	osdMax7456.init();
-	osdMax7456.osd_frame_type = 1;
-	osd_should_run = 1;
-	//playuav hack end
 
     // set the correct flight mode
     // ---------------------------
