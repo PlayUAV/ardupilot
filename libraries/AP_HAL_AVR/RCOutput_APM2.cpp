@@ -55,8 +55,10 @@ void APM2RCOutput::init(void* machtnichts) {
     //--------------- TIMER5: CH_10, and CH_11 ---------------
     // NB TIMER5 is shared with PPM input from RCInput_APM2.cpp
     // The TIMER5 registers are assumed to be setup already.
-    hal.gpio->pinMode(45, HAL_GPIO_OUTPUT); // CH_10 (PL4/OC5B)
-    hal.gpio->pinMode(44, HAL_GPIO_OUTPUT); // CH_11 (PL5/OC5C)
+	//playuav hack begin
+	//hal.gpio->pinMode(45, HAL_GPIO_OUTPUT); // CH_10 (PL4/OC5B)
+	//hal.gpio->pinMode(44, HAL_GPIO_OUTPUT); // CH_11 (PL5/OC5C)
+	//playuav hack end
 }
 
 /* Output freq (1/period) control */
@@ -95,10 +97,12 @@ uint16_t APM2RCOutput::get_freq(uint8_t ch) {
             break;
         /* CH_10 and CH_11 share TIMER5 with input capture.
          * The period is specified in OCR5A rater than the ICR. */
-        case CH_10:
-        case CH_11:
-            icr = OCR5A;
-            break;
+			//playuav hack begin
+			//case CH_10:
+			//case CH_11:
+			//    icr = OCR5A;
+			//    break;
+			//playuav hack end
         default:
             return 0;
     }
@@ -118,8 +122,10 @@ void APM2RCOutput::enable_ch(uint8_t ch) {
     case 5: TCCR3A |= (1<<COM3C1); break; // CH_6 : OC3C
     case 6: TCCR3A |= (1<<COM3B1); break; // CH_7 : OC3B
     case 7: TCCR3A |= (1<<COM3A1); break; // CH_8 : OC3A
-    case 9: TCCR5A |= (1<<COM5B1); break; // CH_10 : OC5B
-    case 10: TCCR5A |= (1<<COM5C1); break; // CH_11 : OC5C
+		//playuav hack begin
+		//case 9: TCCR5A |= (1<<COM5B1); break; // CH_10 : OC5B
+		//case 10: TCCR5A |= (1<<COM5C1); break; // CH_11 : OC5C
+		//playuav hack end
     }
 }
 
@@ -133,8 +139,10 @@ void APM2RCOutput::disable_ch(uint8_t ch) {
     case 5: TCCR3A &= ~(1<<COM3C1); break; // CH_6 : OC3C
     case 6: TCCR3A &= ~(1<<COM3B1); break; // CH_7 : OC3B
     case 7: TCCR3A &= ~(1<<COM3A1); break; // CH_8 : OC3A
-    case 9: TCCR5A &= ~(1<<COM5B1); break; // CH_10 : OC5B
-    case 10: TCCR5A &= ~(1<<COM5C1); break; // CH_11 : OC5C
+		//playuav hack begin
+		//case 9: TCCR5A &= ~(1<<COM5B1); break; // CH_10 : OC5B
+		//case 10: TCCR5A &= ~(1<<COM5C1); break; // CH_11 : OC5C
+		//playuav hack end
     }
 }
 
@@ -160,8 +168,10 @@ void APM2RCOutput::write(uint8_t ch, uint16_t period_us) {
     case 5:  OCR3C=pwm; break;  // out6
     case 6:  OCR3B=pwm; break;  // out7
     case 7:  OCR3A=pwm; break;  // out8
-    case 9:  OCR5B=pwm; break;  // out10
-    case 10: OCR5C=pwm; break;  // out11
+		//playuav hack begin
+		//case 9:  OCR5B=pwm; break;  // out10
+		//case 10: OCR5C=pwm; break;  // out11
+		//playuav hack end
     }
 }
 
@@ -185,8 +195,10 @@ uint16_t APM2RCOutput::read(uint8_t ch) {
     case 5:  pwm=OCR3C; break;      // out6
     case 6:  pwm=OCR3B; break;      // out7
     case 7:  pwm=OCR3A; break;      // out8
-    case 9:  pwm=OCR5B; break;      // out10
-    case 10: pwm=OCR5C; break;      // out11
+		//playuav hack begin
+		//case 9:  pwm=OCR5B; break;      // out10
+		//case 10: pwm=OCR5C; break;      // out11
+		//playuav hack end
     }
     /* scale from 0.5us resolution (timer units) to 1us units */
     return pwm>>1;

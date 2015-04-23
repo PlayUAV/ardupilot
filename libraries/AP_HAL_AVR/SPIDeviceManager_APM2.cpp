@@ -58,6 +58,18 @@ void APM2SPIDeviceManager::init(void* machtnichts) {
      * ubrr3 = 3 */
     _optflow_spi3 = new AVRSPI3DeviceDriver(optflow_cs, 3, 3);
     _optflow_spi3->init();
+
+	//playuav hack begin - max7456 SPI CS
+	/* max7456 on board cs is on Arduino pin 70, PORTG3 */
+	AVRDigitalSource* max7456OnBoard_cs = new AVRDigitalSource(_BV(3), PG);
+	_max7456Onboard = new AVRSPI0DeviceDriver(max7456OnBoard_cs, SPI0_SPCR_500kHz, SPI0_SPCR_8MHz, SPI0_SPSR_8MHz);
+	_max7456Onboard->init();
+
+	/* max7456 external cs is on Arduino pin 44, PORTL5 */
+	AVRDigitalSource* max7456Ext_cs = new AVRDigitalSource(_BV(5), PL);
+	_max7456Ext = new AVRSPI0DeviceDriver(max7456Ext_cs, SPI0_SPCR_500kHz, SPI0_SPCR_8MHz, SPI0_SPSR_8MHz);
+	_max7456Ext->init();
+	//playuav hack end
 }
 
 AP_HAL::SPIDeviceDriver* APM2SPIDeviceManager::device(enum AP_HAL::SPIDevice d) 
@@ -73,6 +85,14 @@ AP_HAL::SPIDeviceDriver* APM2SPIDeviceManager::device(enum AP_HAL::SPIDevice d)
             return _optflow_spi0;
         case AP_HAL::SPIDevice_ADNS3080_SPI3:
             return _optflow_spi3;
+
+			//playuav hack begin - max7456 SPI CS
+		case AP_HAL::SPIDevice_MAX7456Onboard:
+			return _max7456Onboard;
+		case AP_HAL::SPIDevice_MAX7456Ext:
+			return _max7456Ext;
+			//playuav hack end
+
         default:
             return NULL;
     };

@@ -85,6 +85,10 @@
 
 #include <AP_Rally.h>
 
+//playuav hack begin
+#include <AP_OSD_MAX7456.h>
+//playuav hack end
+
 #include <AP_OpticalFlow.h>     // Optical Flow library
 
 // Pre-AP_HAL compatibility
@@ -187,6 +191,12 @@ static int32_t pitch_limit_min_cd;
 
 // GPS driver
 static AP_GPS gps;
+
+//playuav hack begin
+// OSD driver
+static AP_OSD_MAX7456 osdMax7456;
+static int8_t osd_should_run = -1;
+//playuav hack end
 
 // flight modes convenience array
 static AP_Int8          *flight_modes = &g.flight_mode1;
@@ -805,10 +815,54 @@ static const AP_Scheduler::Task scheduler_tasks[] PROGMEM = {
     { telemetry_send,        10,    100 },	
 #endif
     { terrain_update,         5,    500 },
+
+	//playuav hack begin
+	{ update_osd,		     10,    300 },
+	//playuav hack end
 };
 
 // setup the var_info table
 AP_Param param_loader(var_info);
+
+//playuav hack begin
+static void update_osd(void)
+{
+	//return;
+	if(osd_should_run <0)
+		return;
+	osdMax7456._BatteryVol = battery.voltage();
+	osdMax7456._BatteryCurrent = battery.current_amps() * 100;
+	osdMax7456._BatteryPercent = battery.capacity_remaining_pct();
+	osdMax7456._BatteryConsum =  battery.current_total_mah();	//Total current consume since start up in amp/h
+
+	osdMax7456._GPSSats = gps.num_sats(0);
+	osdMax7456._GPSLongitudePrint  = current_loc.lng * 0.0000000001;
+	osdMax7456._GPSLatitudePrint = current_loc.lat * 0.0000000001;
+
+	osdMax7456._groundSpeed = ahrs.groundspeed();
+	osdMax7456._heading = (ahrs.yaw_sensor / 100) % 360;
+	osdMax7456._throttle = throttle_percentage();
+	osdMax7456._altitude = (current_loc.alt - ahrs.get_home().alt) * 0.01f;
+	//float climbRate = climb_rate / 100.0f;
+
+	osdMax7456._pitch = ahrs.pitch * 57.2957795131;		//to degree *180/pi
+	osdMax7456._roll = ahrs.roll * 57.2957795131;		//to degree *180/pi
+	//int8_t yaw = ahrs.yaw * 57.2957795131;		//to degree *180/pi
+
+	osdMax7456._WPDirection = nav_controller->target_bearing_cd() * 0.01f;
+	//osdMax7456._WPDistance = wp_distance*100;
+	osdMax7456._WPDistance = get_distance(current_loc, next_WP_loc)*100;
+	//uint8_t wayPointNum = mission.get_current_nav_index();
+
+	osdMax7456._homeDirection = get_bearing_cd(home, current_loc)*0.01f;
+	osdMax7456._homeDistance = get_distance_cm(home, current_loc);
+
+	osdMax7456._flyMode = control_mode;
+	osdMax7456._startTime = hal.scheduler->millis() * 0.001f;
+
+	osdMax7456.updateScreen();
+}
+//playuav hack end
 
 void setup() {
     cliSerial = hal.console;

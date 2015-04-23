@@ -130,6 +130,11 @@ public:
         k_param_rtl_autoland,
         k_param_override_channel,
         k_param_stall_prevention,
+
+		//playuav hack begin
+		k_param_osdMax7456,				
+		//playuav hack end
+
 #if OPTFLOW == ENABLED
         k_param_optflow,
 #endif

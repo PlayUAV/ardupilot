@@ -184,6 +184,12 @@ private:
     uint8_t        crlf_count;
 #endif
 
+	//playuav hack begin
+	//this allow us to detect if the user wanting upload max7456 fonts
+	uint8_t			star_count;
+	void		uploadFont(mavlink_channel_t chan);
+	//playuav hack end
+
     // waypoints
     uint16_t        waypoint_request_i; // request index
     uint16_t        waypoint_request_last; // last request index

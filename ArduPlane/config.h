@@ -270,17 +270,27 @@
 // CAMERA TRIGGER AND CONTROL
 //
 // uses 1182 bytes of memory
+//playuav hack begin
+//#ifndef CAMERA
+// # define CAMERA         ENABLED
+//#endif
 #ifndef CAMERA
- # define CAMERA         ENABLED
+# define CAMERA         DISABLED
 #endif
+//playuav hack end
 
 //////////////////////////////////////////////////////////////////////////////
 // MOUNT (ANTENNA OR CAMERA)
 //
 // uses 7726 bytes of memory on 2560 chips (all options are enabled)
+//playuav hack begin
+//#ifndef MOUNT
+// # define MOUNT          ENABLED
+//#endif
 #ifndef MOUNT
- # define MOUNT          ENABLED
+# define MOUNT          DISABLED
 #endif
+//playuav hack end
 
 // second mount, can for example be used to keep an antenna pointed at the home position
 #ifndef MOUNT2

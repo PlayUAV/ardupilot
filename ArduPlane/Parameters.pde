@@ -1158,6 +1158,13 @@ const AP_Param::Info var_info[] PROGMEM = {
     // @Path: ../libraries/AP_Rally/AP_Rally.cpp
     GOBJECT(rally,  "RALLY_",       AP_Rally),
 
+	//playuav hack begin
+	// OSD driver
+    // @Group: OSD_
+    // @Path: ../libraries/AP_OSD/AP_OSD_MAX7456.cpp
+    GOBJECT(osdMax7456, "OSD_", AP_OSD_MAX7456),
+	//playuav hack end
+
     AP_VAREND
 };
 

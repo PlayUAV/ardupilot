@@ -58,7 +58,12 @@ namespace AP_HAL {
         SPIDevice_LSM303D           = 8,        
         SPIDevice_LSM9DS0_AM        = 9,
         SPIDevice_LSM9DS0_G         = 10,
-        SPIDevice_Ublox             = 11
+        SPIDevice_Ublox             = 11,
+
+		//playuav hack begin
+		SPIDevice_MAX7456Onboard       = 12,
+		SPIDevice_MAX7456Ext           = 13,
+		//playuav hack end
     };
 
 }
