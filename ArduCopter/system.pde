@@ -143,6 +143,12 @@ static void init_ardupilot()
     // disable external leds if epm is enabled because of pin conflict on the APM
     notify.init(enable_external_leds);
 
+	//playuav hack begin 
+	osdMax7456.init();
+	osdMax7456.osd_frame_type = 0;
+	osd_should_run = 1;
+	//playuav hack end
+
     // initialise battery monitor
     battery.init();
     
@@ -294,11 +300,7 @@ static void init_ardupilot()
         hal.uartD->set_blocking_writes(false);
     }
 
-	//playuav hack begin 
-	osdMax7456.init();
-	osdMax7456.osd_frame_type = 0;
-	osd_should_run = 1;
-	//playuav hack end
+	
 
     cliSerial->print_P(PSTR("\nReady to FLY "));
 
