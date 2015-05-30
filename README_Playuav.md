@@ -10,4 +10,6 @@ The hacked code is located at branch PlaneOSD-*, CopterOSD-*
 You can find the PDF hardware layout at branch CopterOSD-3.12/APMPlus_HW
 
 #More info#
+http://www.playuav.com/download/apmplus/apmosd_manual_en.pdf
+
 Please visit PLAYUAV at: http://www.playuav.com
