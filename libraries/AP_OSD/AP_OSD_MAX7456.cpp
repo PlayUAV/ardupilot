@@ -163,39 +163,45 @@ const AP_Param::GroupInfo AP_OSD_MAX7456::var_info[] PROGMEM = {
 	AP_GROUPINFO("BATT_CON_Y", 49, AP_OSD_MAX7456, _iCurCsmY, 12),
 
 	AP_GROUPINFO("VIDEO_MODE", 50, AP_OSD_MAX7456, _iMode, 1),
-	//AP_GROUPINFO("RSSI", 18, AP_OSD_MAX7456, _iEnableRSSI, 1),
 	AP_GROUPINFO("LANGUAGE", 51, AP_OSD_MAX7456, _iLanguage, 1),
+
+	AP_GROUPINFO("RSSI_EN", 52, AP_OSD_MAX7456, _iEnableRSSI, 0),
+	AP_GROUPINFO("RSSI_X", 53, AP_OSD_MAX7456, _iRSSIX, 14),
+	AP_GROUPINFO("RSSI_Y", 54, AP_OSD_MAX7456, _iRSSIY, 11),
+	AP_GROUPINFO("RSSI_RAW", 55, AP_OSD_MAX7456, _iRSSIRaw, 0),
+	AP_GROUPINFO("RSSI_MIN", 56, AP_OSD_MAX7456, _iRSSIMin, 0),
+	AP_GROUPINFO("RSSI_MAX", 57, AP_OSD_MAX7456, _iRSSIMax, 255),
 
 	AP_GROUPEND
 };
 
 AP_OSD_MAX7456::AP_OSD_MAX7456()
 :_spi(NULL),
-_spi_sem(NULL),
-_groundSpeed(0.0),
-_throttle(0),
-_altitude(0.0),
-_pitch(0),
-_roll(0),
-_homeDirection(0),
-_homeDistance(0),
-_flyMode(0),
-_startTime(0),
-_GPSSats(0),
-_GPSLongitude(0.0),
-_GPSLatitude(0.0),
-_GPSLongitudePrint(0.0),
-_GPSLatitudePrint(0.0),
-_BatteryVol(0.0),
-_BatteryCurrent(0.0),
-_BatteryPercent(0),
-_WPDirection(0),
-_WPDistance(0),
-_iMotorArmed(0),
-_iGPSStatus(0)
+ _spi_sem(NULL),
+ _groundSpeed(0.0),
+ _throttle(0),
+ _altitude(0.0),
+ _pitch(0),
+ _roll(0),
+ _homeDirection(0),
+ _homeDistance(0),
+ _flyMode(0),
+ _startTime(0),
+ _GPSSats(0),
+ _GPSLongitude(0.0),
+ _GPSLatitude(0.0),
+ _GPSLongitudePrint(0.0),
+ _GPSLatitudePrint(0.0),
+ _BatteryVol(0.0),
+ _BatteryCurrent(0.0),
+ _BatteryPercent(0),
+ _WPDirection(0),
+ _WPDistance(0),
+ _iMotorArmed(0),
+ _iGPSStatus(0)
 {
 	AP_Param::setup_object_defaults(this, var_info);
-
+	
 	//default
 	_video_mode = MAX7456_MODE_MASK_PAL;
 
@@ -205,7 +211,7 @@ _iGPSStatus(0)
 // SPI should be initialized externally
 bool AP_OSD_MAX7456::init()
 {
-	_spi = hal.spi->device(AP_HAL::SPIDevice_MAX7456Onboard);
+	_spi = hal.spi->device(AP_HAL::SPIDevice_MAX7456Ext);
 	_spi_sem = _spi->get_semaphore();
 
 	//Test
@@ -272,7 +278,7 @@ bool AP_OSD_MAX7456::init()
 		_lastHorizonColHit[_HorizonHitIndex] = _iHoriX + 1;
 		_lastHorizonRowHit[_HorizonHitIndex] = _iHoriY;
 	}
-
+	
 	clear();
 
 	uint32_t nowtime = hal.scheduler->millis();
@@ -335,7 +341,7 @@ void AP_OSD_MAX7456::openPanel(void)
 	//Auto increment turn writing fast (less SPI commands).
 	//No need to set next char address. Just send them
 	settings = MAX7456_INCREMENT_auto; //To Enable DMM Auto Increment
-
+	
 	_spi->cs_assert();
 
 	_spi->transfer(MAX7456_DMM_reg); //dmm
@@ -351,7 +357,7 @@ void AP_OSD_MAX7456::openPanel(void)
 void AP_OSD_MAX7456::closePanel(void){  
 	_spi->transfer(MAX7456_DMDI_reg);
 	_spi->transfer(MAX7456_END_string); //This is needed "trick" to finish auto increment
-
+	
 	_spi->cs_release();
 
 	row++; //only after finish the auto increment the new row will really act as desired
@@ -393,7 +399,7 @@ size_t AP_OSD_MAX7456::write(uint8_t c)
 void AP_OSD_MAX7456::updateScreen()
 {
 	uint32_t nowTime = hal.scheduler->millis();
-
+	
 	if((nowTime - _lastUpdate10HZ) > 100)
 	{
 		showAt10HZ();
@@ -456,7 +462,7 @@ void AP_OSD_MAX7456::showAt10HZ()
 			else{
 				buf_show[x] = buf_Rule[start];
 			}
-
+			
 			if(++start > 35) start = 0;
 		}
 		buf_show[11] = '\0';
@@ -550,7 +556,7 @@ void AP_OSD_MAX7456::showAt3HZ()
 		printf("%c%2i", 0x0f, _GPSSats);
 		closePanel();
 	}
-
+	
 	// GPS Longitude and Latitude, size 2 x 12
 	if(_bEnableGPSCoord)
 	{
@@ -638,7 +644,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 		else if (_flyMode == 15) mode_str = "atun"; //Auto Tune: autotune the vehicle's roll and pitch gains
 		else if (_flyMode == 16) mode_str = "posh"; //Hybrid: position hold with manual override
 	}
-
+	
 	if(_iLanguage == 0){
 		printf("%c%s", 0xE0, mode_str);
 	}
@@ -646,7 +652,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 		printf("%c%c%s", 0xC7, 0xC8, mode_str);
 	}
 
-
+	
 	closePanel();
 
 	//  flight time from start
@@ -665,7 +671,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 		setPanel(_iCurCsmX, _iCurCsmY);
 		openPanel();
 		printf("%5i%c", (int)_BatteryConsum, 0x82);
-
+		
 		closePanel();
 	}
 
@@ -680,7 +686,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 		else{
 			printf("%c%5.2f%c", 0xCB, (double)_BatteryVol, 0x8e);
 		}
-
+		
 		closePanel();
 	}
 
@@ -719,6 +725,25 @@ void AP_OSD_MAX7456::showAt1HZ()
 		closePanel();
 	}
 
+	// RSSI
+	if(_iEnableRSSI)
+	{
+		setPanel(_iRSSIX, _iRSSIY);
+		openPanel();
+		uint8_t rssi = _iRSSI;
+		if(!_iRSSIRaw)
+		{
+			if(_iRSSIMin < 0) _iRSSIMin = 0;
+			if(_iRSSIMax > 255) _iRSSIMax = 255;
+			if((_iRSSIMax-_iRSSIMin) > 0) 	rssi = (int)((float)(rssi - _iRSSIMin)/(float)(_iRSSIMax-_iRSSIMin)*100.0f);
+			if(rssi < 0)
+				rssi = 0;
+		}
+		printf("%c%d", 0xEC, rssi);
+
+		closePanel();
+	}
+
 	//SPI release
 	_spi_sem->give();
 }
@@ -727,10 +752,10 @@ void AP_OSD_MAX7456::showWarning()
 {
 	setPanel(6, 1);
 	openPanel();
-
+	
 	char* warning_string;
 	warning_string = "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20";
-
+	
 	if(_iGPSStatus < 2)
 	{
 		//No GPS Fix
@@ -793,7 +818,7 @@ void AP_OSD_MAX7456::showHorizon(uint8_t start_col, uint8_t start_row)
 		col_hit[col-1] = (tan(roll) * x) + nose + (rows*9) - 1;//calculating hit point on Y plus offset to eliminate negative values
 		//col_hit[(col-1)] = nose + (rows * 9);
 	}
-
+	
 	//clear the last display
 	for(_HorizonHitIndex=0;_HorizonHitIndex < cols; _HorizonHitIndex++)
 	{
@@ -834,7 +859,7 @@ void AP_OSD_MAX7456::write_NVM(uint32_t font_count, uint8_t *character_bitmap)
 
 	char_address_hi = font_count;
 	char_address_lo = 0;
-
+	  
 	//if (!_spi_sem->take_nonblocking()) {
 	if (!_spi_sem->take(3000)) {
 		hal.console->printf_P(PSTR("AP_OSD_MAX7456::write_NVM() can not get sem\n"));

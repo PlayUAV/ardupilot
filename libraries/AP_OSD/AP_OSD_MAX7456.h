@@ -31,7 +31,7 @@ public:
 	void			closePanel(void);
 	void			openSingle(uint8_t x, uint8_t y);
 
-
+	
 
 	//the implementations of AP_OSD_STREAM::write
 	virtual size_t write(uint8_t c);
@@ -63,6 +63,7 @@ public:
 	float		_heading;
 	uint8_t		_iMotorArmed;
 	uint8_t		_iGPSStatus;
+	uint8_t		_iRSSI;
 protected:
 	//parameters which can be set from the ground station
 	AP_Int8		_bEnableSpeed;				//if show the speed
@@ -137,12 +138,17 @@ protected:
 	AP_Int8     _iModeX;
 	AP_Int8     _iModeY;
 
-
+	
 	AP_Int8		_iEnableCurConsume;
 	AP_Int8		_iCurCsmX;
 	AP_Int8		_iCurCsmY;
 
 	AP_Int8		_iEnableRSSI;
+	AP_Int8		_iRSSIX;
+	AP_Int8		_iRSSIY;
+	AP_Int8		_iRSSIRaw;
+	AP_Int8		_iRSSIMin;
+	AP_Int16	_iRSSIMax;
 	AP_Int8		_iLanguage;			//0:English 1:Chinese
 
 private:
@@ -156,7 +162,7 @@ private:
 
 	AP_HAL::SPIDeviceDriver *_spi;
 	AP_HAL::Semaphore *_spi_sem;
-
+	
 	uint8_t start_col, start_row, col, row, _video_mode;
 	uint32_t		_lastUpdate10HZ;
 	uint32_t		_lastUpdate3HZ;
@@ -165,7 +171,7 @@ private:
 	uint8_t			_lastHorizonRowHit[HORIZON_LEN];
 	uint8_t			_HorizonHitIndex;
 
-
+	
 };
 
 #endif //  __AP_OSD_MAX7456_H__
