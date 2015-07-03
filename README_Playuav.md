@@ -4,6 +4,9 @@ We have made a hack of APM(ArduPilot Mega). We integrate an OSD module with the 
 
 #Code hack#
 The hacked code is located at branch PlaneOSD-*, CopterOSD-*
+The latest build based on branch: PlanOSD-release and CopterOSD-3.2.1
+The build firmware for extend OSD board can be download here:
+http://www.playuav.com/download/apm_exboard_fw.zip
 
 #Schematic#
 You can find the PDF hardware layout at branch CopterOSD-3.12/APMPlus_HW
