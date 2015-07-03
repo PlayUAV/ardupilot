@@ -31,7 +31,7 @@ public:
 	void			closePanel(void);
 	void			openSingle(uint8_t x, uint8_t y);
 
-	
+
 
 	//the implementations of AP_OSD_STREAM::write
 	virtual size_t write(uint8_t c);
@@ -66,48 +66,85 @@ public:
 protected:
 	//parameters which can be set from the ground station
 	AP_Int8		_bEnableSpeed;				//if show the speed
-	AP_Int8		_bEnableAlt;				
-	AP_Int8		_bEnableThrottle;
-	AP_Int8		_bEnablePitch;
-	AP_Int8		_bEnableRoll;
-	AP_Int8		_bEnableHome;
-	AP_Int8		_bEnableMode;
-	AP_Int8		_bEnableTime;
-	AP_Int8		_bEnableHorizon;
-	AP_Int8		_bEnableGPSSats;
-	AP_Int8		_bEnableGPSCoord;
-	AP_Int8		_bEnableBattVol;
-	AP_Int8		_bEnableBattCur;
-	AP_Int8		_bEnableBattPercent;
-	AP_Int8		_bEnableWP;
-	AP_Int8		_bEnableHead;
-	AP_Int8		_bEnableHeadRose;
-	AP_Int8		_iMode;
-	AP_Int8		_iEnableRSSI;
-	AP_Int8		_iEnableCurConsume;
-	
+	AP_Int8     _iSpdX;
+	AP_Int8     _iSpdY;
 
-	//pisition
-	uint8_t		_panSpeed_XY[2];
-	uint8_t		_panThrottle_XY[2];
-	uint8_t		_panVehicleAlt_XY[2];
-	uint8_t		_panPitch_XY[2];
-	uint8_t		_panRoll_XY[2];
-	uint8_t		_panHomeDir_XY[2];
-	uint8_t		_panHomeDist_XY[2];
-	uint8_t		_panMode_XY[2];
-	uint8_t		_panTime_XY[2];
-	uint8_t		_panHorizon_XY[2];
-	uint8_t		_panGPSSats_XY[2];
-	uint8_t		_panGPSCoord_XY[2];
-	uint8_t		_panBatteryVol_XY[2];
-	uint8_t		_panBatteryCurrent_XY[2];
-	uint8_t		_panBatteryPercent_XY[2];
-	uint8_t		_panBatteryConsume_XY[2];
-	uint8_t		_panWPDir_XY[2];
-	uint8_t		_panWPDist_XY[2];
-	uint8_t		_panRSSI_XY[2];
-	uint8_t		_panWarning_XY[2];
+	AP_Int8		_bEnableAlt;	
+	AP_Int8		_iAltX;
+	AP_Int8		_iAltY;
+
+	AP_Int8		_bEnableThrottle;
+	AP_Int8		_iThrotX;
+	AP_Int8		_iThrotY;
+
+	AP_Int8		_bEnablePitch;
+	AP_Int8		_iPichX;
+	AP_Int8		_iPichY;
+
+	AP_Int8		_bEnableRoll;
+	AP_Int8		_iRolX;
+	AP_Int8		_iRolY;
+
+	AP_Int8		_bEnableHome;
+	AP_Int8		_iHomeX;
+	AP_Int8		_iHomeY;
+
+	AP_Int8		_bEnableMode;
+	AP_Int8		_iModX;
+	AP_Int8		_iModY;
+
+	AP_Int8		_bEnableTime;
+	AP_Int8		_iTimeX;
+	AP_Int8		_iTimeY;
+
+	AP_Int8		_bEnableHorizon;
+	AP_Int8		_iHoriX;
+	AP_Int8		_iHoriY;
+
+	AP_Int8		_bEnableGPSSats;
+	AP_Int8		_iGPSSatsX;
+	AP_Int8		_iGPSSatsY;
+
+	AP_Int8		_bEnableGPSCoord;
+	AP_Int8     _iGPSCoordX;
+	AP_Int8     _iGPSCoordY;
+
+	AP_Int8		_bEnableBattVol;
+	AP_Int8     _iBatVolX;
+	AP_Int8     _iBatVolY;
+
+	AP_Int8		_bEnableBattCur;
+	AP_Int8     _iBatCurX;
+	AP_Int8     _iBatCurY;
+
+	AP_Int8		_bEnableBattPercent;
+	AP_Int8     _iBatPerX;
+	AP_Int8     _iBatPerY;
+
+	AP_Int8		_bEnableWP;
+	AP_Int8     _iWPX;
+	AP_Int8     _iWPY;
+
+	AP_Int8		_bEnableHead;
+	AP_Int8     _iHeadX;
+	AP_Int8     _iHeadY;
+
+	AP_Int8		_bEnableHeadRose;
+	AP_Int8     _iHeadRoseX;
+	AP_Int8     _iHeadRoseY;
+
+	AP_Int8		_iMode;
+	AP_Int8     _iModeX;
+	AP_Int8     _iModeY;
+
+
+	AP_Int8		_iEnableCurConsume;
+	AP_Int8		_iCurCsmX;
+	AP_Int8		_iCurCsmY;
+
+	AP_Int8		_iEnableRSSI;
+	AP_Int8		_iLanguage;			//0:English 1:Chinese
+
 private:
 	void showArrow(uint8_t rotate_arrow, uint8_t mode);	
 	void showHorizon(uint8_t start_col, uint8_t start_row);
@@ -119,7 +156,7 @@ private:
 
 	AP_HAL::SPIDeviceDriver *_spi;
 	AP_HAL::Semaphore *_spi_sem;
-	
+
 	uint8_t start_col, start_row, col, row, _video_mode;
 	uint32_t		_lastUpdate10HZ;
 	uint32_t		_lastUpdate3HZ;
@@ -128,7 +165,7 @@ private:
 	uint8_t			_lastHorizonRowHit[HORIZON_LEN];
 	uint8_t			_HorizonHitIndex;
 
-	
+
 };
 
 #endif //  __AP_OSD_MAX7456_H__

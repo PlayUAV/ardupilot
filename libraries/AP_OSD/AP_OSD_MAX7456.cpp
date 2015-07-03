@@ -96,135 +96,108 @@ extern const AP_HAL::HAL& hal;
 const AP_Param::GroupInfo AP_OSD_MAX7456::var_info[] PROGMEM = {
 
 	AP_GROUPINFO("SPEED", 0, AP_OSD_MAX7456, _bEnableSpeed, 1),
+	AP_GROUPINFO("SPD_X", 1, AP_OSD_MAX7456, _iSpdX, 1),
+	AP_GROUPINFO("SPD_Y", 2, AP_OSD_MAX7456, _iSpdY, 8),
 
-	AP_GROUPINFO("ALTITUDE", 1, AP_OSD_MAX7456, _bEnableAlt, 1),
+	AP_GROUPINFO("ALTITUDE", 3, AP_OSD_MAX7456, _bEnableAlt, 1),
+	AP_GROUPINFO("ALT_X", 4, AP_OSD_MAX7456, _iAltX, 21),
+	AP_GROUPINFO("ALT_Y", 5, AP_OSD_MAX7456, _iAltY, 8),
 
-	AP_GROUPINFO("THROTTLE", 2, AP_OSD_MAX7456, _bEnableThrottle, 1),
+	AP_GROUPINFO("THROTTLE", 6, AP_OSD_MAX7456, _bEnableThrottle, 1),
+	AP_GROUPINFO("THROTTLE_X", 7, AP_OSD_MAX7456, _iThrotX, 1),
+	AP_GROUPINFO("THROTTLE_Y", 8, AP_OSD_MAX7456, _iThrotY, 2),
 
-	AP_GROUPINFO("PITCH", 3, AP_OSD_MAX7456, _bEnablePitch, 1),
+	AP_GROUPINFO("PITCH", 9, AP_OSD_MAX7456, _bEnablePitch, 1),
+	AP_GROUPINFO("PITCH_X", 10, AP_OSD_MAX7456, _iPichX, 8),
+	AP_GROUPINFO("PITCH_Y", 11, AP_OSD_MAX7456, _iPichY, 2),
 
-	AP_GROUPINFO("ROLL", 4, AP_OSD_MAX7456, _bEnableRoll, 1),
+	AP_GROUPINFO("ROLL", 12, AP_OSD_MAX7456, _bEnableRoll, 1),
+	AP_GROUPINFO("ROLL_X", 13, AP_OSD_MAX7456, _iRolX, 14),
+	AP_GROUPINFO("ROLL_Y", 14, AP_OSD_MAX7456, _iRolY, 2),
 
-	AP_GROUPINFO("HOME", 5, AP_OSD_MAX7456, _bEnableHome, 1),
+	AP_GROUPINFO("HOME", 15, AP_OSD_MAX7456, _bEnableHome, 1),
+	AP_GROUPINFO("HOME_X", 16, AP_OSD_MAX7456, _iHomeX, 22),
+	AP_GROUPINFO("HOME_Y", 17, AP_OSD_MAX7456, _iHomeY, 3),
 
-	AP_GROUPINFO("MODE", 6, AP_OSD_MAX7456, _bEnableMode, 1),
+	AP_GROUPINFO("MODE", 18, AP_OSD_MAX7456, _bEnableMode, 1),
+	AP_GROUPINFO("MODE_X", 19, AP_OSD_MAX7456, _iModX, 21),
+	AP_GROUPINFO("MODE_Y", 20, AP_OSD_MAX7456, _iModY, 5),
 
-	AP_GROUPINFO("TIME", 7, AP_OSD_MAX7456, _bEnableTime, 1),
+	AP_GROUPINFO("TIME", 21, AP_OSD_MAX7456, _bEnableTime, 1),
+	AP_GROUPINFO("TIME_X", 22, AP_OSD_MAX7456, _iTimeX, 22),
+	AP_GROUPINFO("TIME_Y", 23, AP_OSD_MAX7456, _iTimeY, 6),
 
-	AP_GROUPINFO("HORIZON", 8, AP_OSD_MAX7456, _bEnableHorizon, 1),
+	AP_GROUPINFO("HORIZON", 24, AP_OSD_MAX7456, _bEnableHorizon, 1),
+	AP_GROUPINFO("HORIZON_X", 25, AP_OSD_MAX7456, _iHoriX, 8),
+	AP_GROUPINFO("HORIZON_Y", 26, AP_OSD_MAX7456, _iHoriY, 6),
 
-	AP_GROUPINFO("GPS_SATS", 9, AP_OSD_MAX7456, _bEnableGPSSats, 1),
+	AP_GROUPINFO("GPS_SATS", 27, AP_OSD_MAX7456, _bEnableGPSSats, 1),
+	AP_GROUPINFO("GPS_SATS_X", 28, AP_OSD_MAX7456, _iGPSSatsX, 1),
+	AP_GROUPINFO("GPS_SATS_Y", 29, AP_OSD_MAX7456, _iGPSSatsY, 10),
 
-	AP_GROUPINFO("GPS_COORD", 10, AP_OSD_MAX7456, _bEnableGPSCoord, 1),
+	AP_GROUPINFO("GPS_COORD", 30, AP_OSD_MAX7456, _bEnableGPSCoord, 1),
+	AP_GROUPINFO("GPS_COORD_X", 31, AP_OSD_MAX7456, _iGPSCoordX, 1),
+	AP_GROUPINFO("GPS_COORD_Y", 32, AP_OSD_MAX7456, _iGPSCoordY, 11),
 
-	AP_GROUPINFO("BATT_VOL", 11, AP_OSD_MAX7456, _bEnableBattVol, 1),
+	AP_GROUPINFO("BATT_VOL", 33, AP_OSD_MAX7456, _bEnableBattVol, 1),
+	AP_GROUPINFO("BATT_VOL_X", 34, AP_OSD_MAX7456, _iBatVolX, 21),
+	AP_GROUPINFO("BATT_VOL_Y", 35, AP_OSD_MAX7456, _iBatVolY, 9),
 
-	AP_GROUPINFO("BATT_CUR", 12, AP_OSD_MAX7456, _bEnableBattCur, 1),
+	AP_GROUPINFO("BATT_CUR", 36, AP_OSD_MAX7456, _bEnableBattCur, 1),
+	AP_GROUPINFO("BATT_CUR_X", 37, AP_OSD_MAX7456, _iBatCurX, 22),
+	AP_GROUPINFO("BATT_CUR_Y", 38, AP_OSD_MAX7456, _iBatCurY, 10),
 
-	AP_GROUPINFO("BATT_PER", 13, AP_OSD_MAX7456, _bEnableBattPercent, 1),
+	AP_GROUPINFO("BATT_PER", 39, AP_OSD_MAX7456, _bEnableBattPercent, 1),
+	AP_GROUPINFO("BATT_PER_X", 40, AP_OSD_MAX7456, _iBatPerX, 24),
+	AP_GROUPINFO("BATT_PER_Y", 41, AP_OSD_MAX7456, _iBatPerY, 11),
 
-	AP_GROUPINFO("WP", 14, AP_OSD_MAX7456, _bEnableWP, 1),
+	AP_GROUPINFO("WP", 42, AP_OSD_MAX7456, _bEnableWP, 1),
+	AP_GROUPINFO("WP_X", 43, AP_OSD_MAX7456, _iWPX, 1),
+	AP_GROUPINFO("WP_Y", 44, AP_OSD_MAX7456, _iWPY, 4),
 
-	AP_GROUPINFO("HEAD", 15, AP_OSD_MAX7456, _bEnableHead, 1),
-	AP_GROUPINFO("HEAD_ROSE", 16, AP_OSD_MAX7456, _bEnableHeadRose, 1),
-	AP_GROUPINFO("BATT_CON", 17, AP_OSD_MAX7456, _iEnableCurConsume, 1),
-	AP_GROUPINFO("VIDEO_MODE", 18, AP_OSD_MAX7456, _iMode, 1),
+	AP_GROUPINFO("HEAD", 45, AP_OSD_MAX7456, _bEnableHead, 1),
+	AP_GROUPINFO("HEAD_ROSE", 46, AP_OSD_MAX7456, _bEnableHeadRose, 1),
+
+	AP_GROUPINFO("BATT_CON", 47, AP_OSD_MAX7456, _iEnableCurConsume, 1),
+	AP_GROUPINFO("BATT_CON_X", 48, AP_OSD_MAX7456, _iCurCsmX, 21),
+	AP_GROUPINFO("BATT_CON_Y", 49, AP_OSD_MAX7456, _iCurCsmY, 12),
+
+	AP_GROUPINFO("VIDEO_MODE", 50, AP_OSD_MAX7456, _iMode, 1),
 	//AP_GROUPINFO("RSSI", 18, AP_OSD_MAX7456, _iEnableRSSI, 1),
-	
+	AP_GROUPINFO("LANGUAGE", 51, AP_OSD_MAX7456, _iLanguage, 1),
 
 	AP_GROUPEND
 };
 
 AP_OSD_MAX7456::AP_OSD_MAX7456()
 :_spi(NULL),
- _spi_sem(NULL),
- _groundSpeed(0.0),
- _throttle(0),
- _altitude(0.0),
- _pitch(0),
- _roll(0),
- _homeDirection(0),
- _homeDistance(0),
- _flyMode(0),
- _startTime(0),
- _GPSSats(0),
- _GPSLongitude(0.0),
- _GPSLatitude(0.0),
- _GPSLongitudePrint(0.0),
- _GPSLatitudePrint(0.0),
- _BatteryVol(0.0),
- _BatteryCurrent(0.0),
- _BatteryPercent(0),
- _WPDirection(0),
- _WPDistance(0),
- _iMotorArmed(0),
- _iGPSStatus(0)
+_spi_sem(NULL),
+_groundSpeed(0.0),
+_throttle(0),
+_altitude(0.0),
+_pitch(0),
+_roll(0),
+_homeDirection(0),
+_homeDistance(0),
+_flyMode(0),
+_startTime(0),
+_GPSSats(0),
+_GPSLongitude(0.0),
+_GPSLatitude(0.0),
+_GPSLongitudePrint(0.0),
+_GPSLatitudePrint(0.0),
+_BatteryVol(0.0),
+_BatteryCurrent(0.0),
+_BatteryPercent(0),
+_WPDirection(0),
+_WPDistance(0),
+_iMotorArmed(0),
+_iGPSStatus(0)
 {
 	AP_Param::setup_object_defaults(this, var_info);
-	
+
 	//default
 	_video_mode = MAX7456_MODE_MASK_PAL;
-
-	//set the position
-	_panSpeed_XY[0] = 1; 
-	_panSpeed_XY[1] = 8;
-
-	_panThrottle_XY[0] = 1;
-	_panThrottle_XY[1] = 2;
-
-	_panVehicleAlt_XY[0] = 21;
-	_panVehicleAlt_XY[1] = 8;
-
-	_panPitch_XY[0] = 8;
-	_panPitch_XY[1] = 2;
-
-	_panRoll_XY[0] = 14;
-	_panRoll_XY[1] = 2;
-
-	_panHomeDir_XY[0] = 21;
-	_panHomeDir_XY[1] = 2;
-
-	_panHomeDist_XY[0] = 22;
-	_panHomeDist_XY[1] = 3;
-
-	_panRSSI_XY[0] = 23;
-	_panRSSI_XY[1] = 4;
-
-	_panMode_XY[0] = 21;
-	_panMode_XY[1] = 5;
-
-	_panTime_XY[0] = 22;
-	_panTime_XY[1] = 6;
-
-	_panHorizon_XY[0] = 8;
-	_panHorizon_XY[1] = 6;
-
-	_panGPSSats_XY[0] = 1;
-	_panGPSSats_XY[1] = 10;
-
-	_panGPSCoord_XY[0] = 1;
-	_panGPSCoord_XY[1] = 11;
-
-	_panBatteryVol_XY[0] = 21;
-	_panBatteryVol_XY[1] = 9;
-
-	_panBatteryCurrent_XY[0] = 22;
-	_panBatteryCurrent_XY[1] = 10;
-
-	_panBatteryConsume_XY[0] = 21;
-	_panBatteryConsume_XY[1] = 12;
-
-	_panBatteryPercent_XY[0] = 24;
-	_panBatteryPercent_XY[1] = 11;
-
-	_panWPDir_XY[0] = 1;
-	_panWPDir_XY[1] = 4;
-
-	_panWPDist_XY[0] = 2;
-	_panWPDist_XY[1] = 5;
-
-	_panWarning_XY[0] = 6;
-	_panWarning_XY[1] = 1;
 
 	_heading = 0.0;
 }
@@ -235,7 +208,7 @@ bool AP_OSD_MAX7456::init()
 	_spi = hal.spi->device(AP_HAL::SPIDevice_MAX7456Ext);
 	_spi_sem = _spi->get_semaphore();
 
-	//TTTest
+	//Test
 	//read_one_char_from_NVM(1);
 
 	if (!_spi_sem->take(100)){
@@ -253,13 +226,6 @@ bool AP_OSD_MAX7456::init()
 	else
 	{
 		_video_mode = MAX7456_MODE_MASK_PAL;
-		_panGPSSats_XY[1] = 11;
-		_panGPSCoord_XY[1] = 12;
-		
-		_panBatteryVol_XY[1] = 10;
-		_panBatteryCurrent_XY[1] = 11;
-		_panBatteryConsume_XY[1] = 13;
-		_panBatteryPercent_XY[1] = 12;
 	}
 
 	_spi->cs_assert();
@@ -303,10 +269,10 @@ bool AP_OSD_MAX7456::init()
 
 	for(_HorizonHitIndex=0;_HorizonHitIndex < HORIZON_LEN; _HorizonHitIndex++)
 	{
-		_lastHorizonColHit[_HorizonHitIndex] = _panHorizon_XY[0] + 1;
-		_lastHorizonRowHit[_HorizonHitIndex] = _panHorizon_XY[1];
+		_lastHorizonColHit[_HorizonHitIndex] = _iHoriX + 1;
+		_lastHorizonRowHit[_HorizonHitIndex] = _iHoriY;
 	}
-	
+
 	clear();
 
 	uint32_t nowtime = hal.scheduler->millis();
@@ -334,7 +300,7 @@ void AP_OSD_MAX7456::clear()
 
 	//hal.scheduler->delay(50);
 
-	setPanel(_panHorizon_XY[0], _panHorizon_XY[1]);
+	setPanel(_iHoriX, _iHoriY);
 	openPanel();
 	printf_P(PSTR("\xDA\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xDB|"));
 	printf_P(PSTR("\xDA\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xDB|"));
@@ -369,7 +335,7 @@ void AP_OSD_MAX7456::openPanel(void)
 	//Auto increment turn writing fast (less SPI commands).
 	//No need to set next char address. Just send them
 	settings = MAX7456_INCREMENT_auto; //To Enable DMM Auto Increment
-	
+
 	_spi->cs_assert();
 
 	_spi->transfer(MAX7456_DMM_reg); //dmm
@@ -385,7 +351,7 @@ void AP_OSD_MAX7456::openPanel(void)
 void AP_OSD_MAX7456::closePanel(void){  
 	_spi->transfer(MAX7456_DMDI_reg);
 	_spi->transfer(MAX7456_END_string); //This is needed "trick" to finish auto increment
-	
+
 	_spi->cs_release();
 
 	row++; //only after finish the auto increment the new row will really act as desired
@@ -427,7 +393,7 @@ size_t AP_OSD_MAX7456::write(uint8_t c)
 void AP_OSD_MAX7456::updateScreen()
 {
 	uint32_t nowTime = hal.scheduler->millis();
-	
+
 	if((nowTime - _lastUpdate10HZ) > 100)
 	{
 		showAt10HZ();
@@ -470,14 +436,27 @@ void AP_OSD_MAX7456::showAt10HZ()
 		0xf4,0xf0,0xf0,0xf1,0xf0,0xf0,0xf1,0xf0,0xf0,
 		0xf3,0xf0,0xf0,0xf1,0xf0,0xf0,0xf1,0xf0,0xf0,
 		0xf5,0xf0,0xf0,0xf1,0xf0,0xf0,0xf1,0xf0,0xf0};
+	static const char buf_Rule_en[36] = { 0x2A,0xf0,0xf0,0xf1,0xf0,0xf0,0xf1,0xf0,0xf0,
+		0x2B,0xf0,0xf0,0xf1,0xf0,0xf0,0xf1,0xf0,0xf0,
+		0x2C,0xf0,0xf0,0xf1,0xf0,0xf0,0xf1,0xf0,0xf0,
+		0x26,0xf0,0xf0,0xf1,0xf0,0xf0,0xf1,0xf0,0xf0};
+
+
 	if(_bEnableHeadRose)
 	{
 		int8_t start;
 		start = round((_heading * 36)/360);
 		start -= 5;
 		if(start < 0) start += 36;
-		for(int8_t x=0; x <= 10; x++){
-			buf_show[x] = buf_Rule[start];
+		for(int8_t x=0; x <= 10; x++)
+		{
+			if(_iLanguage == 0){
+				buf_show[x] = buf_Rule_en[start];
+			}
+			else{
+				buf_show[x] = buf_Rule[start];
+			}
+
 			if(++start > 35) start = 0;
 		}
 		buf_show[11] = '\0';
@@ -491,7 +470,7 @@ void AP_OSD_MAX7456::showAt10HZ()
 	// -+ value of current Pitch from vehicle with degree symbols and pitch symbol
 	if(_bEnablePitch)
 	{
-		setPanel(_panPitch_XY[0], _panPitch_XY[1]);
+		setPanel(_iPichX, _iPichY);
 		openPanel();
 		printf("%4i%c%c",_pitch,0xb0,0xb1);
 		closePanel();
@@ -501,7 +480,7 @@ void AP_OSD_MAX7456::showAt10HZ()
 	// -+ value of current Roll from vehicle with degree symbols and roll symbol
 	if(_bEnableRoll)
 	{
-		setPanel(_panRoll_XY[0], _panRoll_XY[1]);
+		setPanel(_iRolX, _iRolY);
 		openPanel();
 		printf("%4i%c%c",_roll, 0xb0, 0xb2);
 		closePanel();
@@ -509,7 +488,7 @@ void AP_OSD_MAX7456::showAt10HZ()
 
 	if(_bEnableHorizon)
 	{
-		showHorizon(_panHorizon_XY[0] + 1, _panHorizon_XY[1]);
+		showHorizon(_iHoriX + 1, _iHoriY);
 		_spi->cs_release();
 	}
 
@@ -529,45 +508,60 @@ void AP_OSD_MAX7456::showAt3HZ()
 	// velocity, size 1 x 7
 	if(_bEnableSpeed)
 	{
-		setPanel(_panSpeed_XY[0], _panSpeed_XY[1]);
+		setPanel(_iSpdX, _iSpdY);
 		openPanel();
-		printf("%c%c%3.0f%c%c",0xBC, 0xBD, (double)(_groundSpeed * 3.6), 0xD1, 0xD2);
+		if(_iLanguage == 0){
+			printf("%c%3.0f%c", 0x86, (double)(_groundSpeed * 3.6), 0x81);
+		}
+		else{
+			printf("%c%3.0f%c",0xBC, (double)(_groundSpeed * 3.6), 0x81);
+		}
 		closePanel();
 	}
 
 	// throttle, size 1 x 7
 	if(_bEnableThrottle)
 	{
-		setPanel(_panThrottle_XY[0], _panThrottle_XY[1]);
+		setPanel(_iThrotX, _iThrotY);
 		openPanel();
-		printf("%c%c%3.0i%c",0xBE, 0xBF, _throttle, 0x25);
+		printf("%c%3.0i%c", 0xE1, _throttle, 0x25);
 		closePanel();
 	}
 
 	// altitude, size 1 x 7
 	if(_bEnableAlt)
 	{
-		setPanel(_panVehicleAlt_XY[0], _panVehicleAlt_XY[1]);
+		setPanel(_iAltX, _iAltY);
 		openPanel();
-		printf("%c%c%4.0f%c",0xC0, 0xBD, (double)_altitude, 0x8D);
+		if(_iLanguage == 0){
+			printf("%c%4.0f%c", 0x85, (double)_altitude, 0x8D);
+		}
+		else{
+			printf("%c%4.0f%c", 0xC0, (double)_altitude, 0x8D);
+		}
 		closePanel();
 	}
 
 	// number of locked satellites, size 1 x 5
 	if(_bEnableGPSSats)
 	{
-		setPanel(_panGPSSats_XY[0], _panGPSSats_XY[1]);
+		setPanel(_iGPSSatsX, _iGPSSatsY);
 		openPanel();
 		printf("%c%2i", 0x0f, _GPSSats);
 		closePanel();
 	}
-	
+
 	// GPS Longitude and Latitude, size 2 x 12
 	if(_bEnableGPSCoord)
 	{
-		setPanel(_panGPSCoord_XY[0], _panGPSCoord_XY[1]);
+		setPanel(_iGPSCoordX, _iGPSCoordY);
 		openPanel();
-		printf("%c%c%11.6f|%c%c%11.6f", 0xC1, 0xBD, (double)_GPSLongitudePrint*1000, 0xC2, 0xBD, (double)_GPSLatitudePrint*1000);
+		if(_iLanguage == 0){
+			printf("%c%11.6f|%c%11.6f", 0x84, (double)_GPSLongitudePrint*1000, 0x83, (double)_GPSLatitudePrint*1000);
+		}
+		else{
+			printf("%c%11.6f|%c%11.6f", 0xC1, (double)_GPSLongitudePrint*1000, 0xC2, (double)_GPSLatitudePrint*1000);
+		}
 		closePanel();
 	}
 
@@ -584,12 +578,12 @@ void AP_OSD_MAX7456::showAt1HZ()
 		return ;
 	}
 
-	showWarning();
+	//showWarning();
 
 	if(_bEnableHome)
 	{
 		// home direction, size 1 x 5
-		setPanel(_panHomeDir_XY[0], _panHomeDir_XY[1]);
+		setPanel(_iHomeX, _iHomeY);
 		openPanel();
 		uint8_t home_bearing = round(((float)_homeDirection - _heading)/360.0 * 16.0) + 1; //Convert to int 0-16 
 		if(home_bearing < 0 ) home_bearing += 16; //normalize
@@ -597,7 +591,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 		closePanel();
 
 		// home distance, size 1 x 5
-		setPanel(_panHomeDist_XY[0], _panHomeDist_XY[1]);
+		setPanel(_iHomeX, _iHomeY+1);
 		openPanel();
 		printf("%5.0f%c",(double)(_homeDistance*0.01f), 0x8D);
 		closePanel();
@@ -605,7 +599,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 
 	// flight mode 
 	// TODO - ugly? fixme!
-	setPanel(_panMode_XY[0], _panMode_XY[1]);
+	setPanel(_iModX, _iModY);
 	openPanel();
 	char* mode_str = "";
 	if(osd_frame_type == 1)		//is plan
@@ -644,15 +638,21 @@ void AP_OSD_MAX7456::showAt1HZ()
 		else if (_flyMode == 15) mode_str = "atun"; //Auto Tune: autotune the vehicle's roll and pitch gains
 		else if (_flyMode == 16) mode_str = "posh"; //Hybrid: position hold with manual override
 	}
-	
 
-	printf("%c%c%c%s", 0xC7, 0xC8, 0x20, mode_str);
+	if(_iLanguage == 0){
+		printf("%c%s", 0xE0, mode_str);
+	}
+	else{
+		printf("%c%c%s", 0xC7, 0xC8, mode_str);
+	}
+
+
 	closePanel();
 
 	//  flight time from start
 	if(_bEnableTime)
 	{
-		setPanel(_panTime_XY[0], _panTime_XY[1]);
+		setPanel(_iTimeX, _iTimeY);
 		openPanel();
 		_startTime = hal.scheduler->millis()*0.001f;
 		printf("%c%2i%c%02i", 0xB3, ((int)_startTime/60)%60,0x3A,(int)_startTime%60);
@@ -662,25 +662,32 @@ void AP_OSD_MAX7456::showAt1HZ()
 	// Total battery current consume since start up in amp/h
 	if(_iEnableCurConsume)
 	{
-		setPanel(_panBatteryConsume_XY[0], _panBatteryConsume_XY[1]);
+		setPanel(_iCurCsmX, _iCurCsmY);
 		openPanel();
-		printf("%c%c%5i", 0xeb, 0xcb, (int)_BatteryConsum);
+		printf("%5i%c", (int)_BatteryConsum, 0x82);
+
 		closePanel();
 	}
 
 	// battery voltage, size 1 x 8
 	if(_bEnableBattVol)
 	{
-		setPanel(_panBatteryVol_XY[0], _panBatteryVol_XY[1]);
+		setPanel(_iBatVolX, _iBatVolY);
 		openPanel();
-		printf("%c%5.2f%c", 0xCB, (double)_BatteryVol, 0x8e);
+		if(_iLanguage == 0){
+			printf("%c%5.2f%c", 0xB8, (double)_BatteryVol, 0x8e);
+		}
+		else{
+			printf("%c%5.2f%c", 0xCB, (double)_BatteryVol, 0x8e);
+		}
+
 		closePanel();
 	}
 
 	// battery current, size 1 x 8
 	if(_bEnableBattCur)
 	{
-		setPanel(_panBatteryCurrent_XY[0], _panBatteryCurrent_XY[1]);
+		setPanel(_iBatCurX, _iBatCurY);
 		openPanel();
 		printf("%5.2f%c", (float(_BatteryCurrent) * .01), 0x8F);
 		closePanel();
@@ -689,7 +696,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 	// battery percent, size 1 x 8
 	if(_bEnableBattPercent)
 	{
-		setPanel(_panBatteryPercent_XY[0], _panBatteryPercent_XY[1]);
+		setPanel(_iBatPerX, _iBatPerY);
 		openPanel();
 		printf("%3.0i%c", _BatteryPercent, 0x25);
 		closePanel();
@@ -698,7 +705,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 	if(_bEnableWP)
 	{
 		// waypoint direction, size 1 x 5
-		setPanel(_panWPDir_XY[0], _panWPDir_XY[1]);
+		setPanel(_iWPX, _iWPY);
 		openPanel();
 		uint8_t wp_target_bearing = round(((float)_WPDirection - _heading)/360.0 * 16.0) + 1; //Convert to int 0-16 
 		if(wp_target_bearing < 0 ) wp_target_bearing += 16; //normalize
@@ -706,7 +713,7 @@ void AP_OSD_MAX7456::showAt1HZ()
 		closePanel();
 
 		// waypoint distance, size 1 x 5
-		setPanel(_panWPDist_XY[0], _panWPDist_XY[1]);
+		setPanel(_iWPX, _iWPY+1);
 		openPanel();
 		printf("%5.0f%c",(double)(_WPDistance*0.01f), 0x8D);
 		closePanel();
@@ -718,12 +725,12 @@ void AP_OSD_MAX7456::showAt1HZ()
 
 void AP_OSD_MAX7456::showWarning()
 {
-	setPanel(_panWarning_XY[0], _panWarning_XY[1]);
+	setPanel(6, 1);
 	openPanel();
-	
+
 	char* warning_string;
 	warning_string = "\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20";
-	
+
 	if(_iGPSStatus < 2)
 	{
 		//No GPS Fix
@@ -749,9 +756,23 @@ void AP_OSD_MAX7456::showArrow(uint8_t rotate_arrow, uint8_t mode)
 		arrow_set2 = arrow_set1+0x1;
 	}
 
-	if(mode == 0)		printf("%c%c%c", 0x1F, arrow_set1, arrow_set2);			//home icon
-	else if(mode == 1)	printf("%c%c%c%c", 0xCF, 0xD0, arrow_set1, arrow_set2);	//waypoint
-	else if(mode == 2)	printf("%c%c", arrow_set1, arrow_set2);	//heading
+	if(mode == 0){
+		//home icon
+		printf("%c%c%c", 0x1F, arrow_set1, arrow_set2);			
+	}
+	else if(mode == 1){
+		//waypoint
+		if(_iLanguage == 0){
+			printf("%s%c%c", "WP",arrow_set1, arrow_set2);	
+		}
+		else{
+			printf("%c%c%c%c", 0xCF, 0xD0, arrow_set1, arrow_set2);	
+		}
+	}
+	else if(mode == 2){
+		//heading
+		printf("%c%c", arrow_set1, arrow_set2);	
+	}
 }
 
 // Calculate and shows Artificial Horizon
@@ -772,7 +793,7 @@ void AP_OSD_MAX7456::showHorizon(uint8_t start_col, uint8_t start_row)
 		col_hit[col-1] = (tan(roll) * x) + nose + (rows*9) - 1;//calculating hit point on Y plus offset to eliminate negative values
 		//col_hit[(col-1)] = nose + (rows * 9);
 	}
-	
+
 	//clear the last display
 	for(_HorizonHitIndex=0;_HorizonHitIndex < cols; _HorizonHitIndex++)
 	{
@@ -813,7 +834,7 @@ void AP_OSD_MAX7456::write_NVM(uint32_t font_count, uint8_t *character_bitmap)
 
 	char_address_hi = font_count;
 	char_address_lo = 0;
-	  
+
 	//if (!_spi_sem->take_nonblocking()) {
 	if (!_spi_sem->take(3000)) {
 		hal.console->printf_P(PSTR("AP_OSD_MAX7456::write_NVM() can not get sem\n"));
