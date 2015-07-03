@@ -205,7 +205,7 @@ AP_OSD_MAX7456::AP_OSD_MAX7456()
 // SPI should be initialized externally
 bool AP_OSD_MAX7456::init()
 {
-	_spi = hal.spi->device(AP_HAL::SPIDevice_MAX7456Ext);
+	_spi = hal.spi->device(AP_HAL::SPIDevice_MAX7456Onboard);
 	_spi_sem = _spi->get_semaphore();
 
 	//Test
