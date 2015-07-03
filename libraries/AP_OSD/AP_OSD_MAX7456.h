@@ -63,6 +63,7 @@ public:
 	float		_heading;
 	uint8_t		_iMotorArmed;
 	uint8_t		_iGPSStatus;
+	uint8_t		_iRSSI;
 protected:
 	//parameters which can be set from the ground station
 	AP_Int8		_bEnableSpeed;				//if show the speed
@@ -143,6 +144,11 @@ protected:
 	AP_Int8		_iCurCsmY;
 
 	AP_Int8		_iEnableRSSI;
+	AP_Int8		_iRSSIX;
+	AP_Int8		_iRSSIY;
+	AP_Int8		_iRSSIRaw;
+	AP_Int8		_iRSSIMin;
+	AP_Int16	_iRSSIMax;
 	AP_Int8		_iLanguage;			//0:English 1:Chinese
 
 private:

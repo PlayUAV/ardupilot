@@ -963,6 +963,8 @@ static void update_osd(void)
 	osdMax7456._flyMode = control_mode;
 	osdMax7456._startTime = hal.scheduler->millis()*0.001f;
 
+	osdMax7456._iRSSI = receiver_rssi;
+
 	// we are armed if we are not initialising
     if (motors.armed()) {
         osdMax7456._iMotorArmed = 1;

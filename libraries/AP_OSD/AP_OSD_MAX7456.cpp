@@ -163,8 +163,14 @@ const AP_Param::GroupInfo AP_OSD_MAX7456::var_info[] PROGMEM = {
 	AP_GROUPINFO("BATT_CON_Y", 49, AP_OSD_MAX7456, _iCurCsmY, 12),
 
 	AP_GROUPINFO("VIDEO_MODE", 50, AP_OSD_MAX7456, _iMode, 1),
-	//AP_GROUPINFO("RSSI", 18, AP_OSD_MAX7456, _iEnableRSSI, 1),
 	AP_GROUPINFO("LANGUAGE", 51, AP_OSD_MAX7456, _iLanguage, 1),
+
+	AP_GROUPINFO("RSSI_EN", 52, AP_OSD_MAX7456, _iEnableRSSI, 0),
+	AP_GROUPINFO("RSSI_X", 53, AP_OSD_MAX7456, _iRSSIX, 14),
+	AP_GROUPINFO("RSSI_Y", 54, AP_OSD_MAX7456, _iRSSIY, 11),
+	AP_GROUPINFO("RSSI_RAW", 55, AP_OSD_MAX7456, _iRSSIRaw, 0),
+	AP_GROUPINFO("RSSI_MIN", 56, AP_OSD_MAX7456, _iRSSIMin, 0),
+	AP_GROUPINFO("RSSI_MAX", 57, AP_OSD_MAX7456, _iRSSIMax, 255),
 
 	AP_GROUPEND
 };
@@ -205,7 +211,7 @@ AP_OSD_MAX7456::AP_OSD_MAX7456()
 // SPI should be initialized externally
 bool AP_OSD_MAX7456::init()
 {
-	_spi = hal.spi->device(AP_HAL::SPIDevice_MAX7456Onboard);
+	_spi = hal.spi->device(AP_HAL::SPIDevice_MAX7456Ext);
 	_spi_sem = _spi->get_semaphore();
 
 	//Test
@@ -716,6 +722,25 @@ void AP_OSD_MAX7456::showAt1HZ()
 		setPanel(_iWPX, _iWPY+1);
 		openPanel();
 		printf("%5.0f%c",(double)(_WPDistance*0.01f), 0x8D);
+		closePanel();
+	}
+
+	// RSSI
+	if(_iEnableRSSI)
+	{
+		setPanel(_iRSSIX, _iRSSIY);
+		openPanel();
+		uint8_t rssi = _iRSSI;
+		if(!_iRSSIRaw)
+		{
+			if(_iRSSIMin < 0) _iRSSIMin = 0;
+			if(_iRSSIMax > 255) _iRSSIMax = 255;
+			if((_iRSSIMax-_iRSSIMin) > 0) 	rssi = (int)((float)(rssi - _iRSSIMin)/(float)(_iRSSIMax-_iRSSIMin)*100.0f);
+			if(rssi < 0)
+				rssi = 0;
+		}
+		printf("%c%d", 0xEC, rssi);
+
 		closePanel();
 	}
 
